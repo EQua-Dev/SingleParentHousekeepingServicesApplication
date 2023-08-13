@@ -13,6 +13,8 @@ object Common {
     val IRISH_CODE = "+353"
     var facilityName = "Facility"
     var clientName = "Client"
+    const val SERVICES = "Services"
+
 
     var serviceToRate = ""
 

@@ -129,8 +129,8 @@ class SignIn : Fragment() {
                                         }
                                     }
                                     requireContext().toast("Sign In Success")
-//                                    val navToHome = SignInDirections.actionSignInToClientBaseScreen()
-//                                    findNavController().navigate(navToHome)
+                                    val navToHome = SignInDirections.actionSignInToClientBaseScreen()
+                                    findNavController().navigate(navToHome)
                                 }else{
                                     CoroutineScope(Dispatchers.IO).launch {
                                         val facilityRef = Common.facilityCollectionRef.document(

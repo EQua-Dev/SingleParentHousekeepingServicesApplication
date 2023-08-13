@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.SingleParentHousekeepingServicesApplication" parent="Base.Theme.SingleParentHousekeepingServicesApplication" />
+    <style name="TabTextAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

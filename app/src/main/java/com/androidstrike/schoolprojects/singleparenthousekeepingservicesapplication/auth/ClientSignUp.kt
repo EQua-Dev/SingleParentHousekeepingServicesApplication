@@ -49,8 +49,8 @@ class ClientSignUp : Fragment() {
     private lateinit var userLastName: String
     private lateinit var userEmail: String
     private lateinit var userPhoneNumber: String
-    private lateinit var userAddress: String
-    private lateinit var userCountryCode: String
+    //private lateinit  userAddress: String
+//    private lateinit var userCountryCode: String
 
     //    private lateinit var userAddressLongitude: String
 //    private lateinit var userAddressLatitude: String
@@ -79,7 +79,7 @@ class ClientSignUp : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentClientSignUpBinding.inflate(inflater, container, false)
         return binding.root
@@ -121,29 +121,15 @@ class ClientSignUp : Fragment() {
             }
         }
 
-        binding.signUpAddress.setOnFocusChangeListener { v, hasFocus ->
-            val addressLayout = v as TextInputEditText
-            val addressText = addressLayout.text.toString()
-            userAddress = addressText
-            if (!hasFocus) {
-                if (userAddress.isEmpty()) {
-                    binding.textInputLayoutSignUpAddress.error =
-                        "Enter last name" // Display an error message
-                } else {
-                    binding.textInputLayoutSignUpAddress.error = null // Clear any previous error
-                    addressOkay = true
-                }
-            }
-        }
 
         binding.signUpPhoneNumber.setOnFocusChangeListener { v, hasFocus ->
             val phoneNumberLayout = v as TextInputEditText
             val phoneNumberText = phoneNumberLayout.text.toString()
             userPhoneNumber = phoneNumberText
             if (!hasFocus) {
-                if (userPhoneNumber.isEmpty() || userPhoneNumber.length < resources.getInteger(R.integer.phone_number_length)) {
+                if (userPhoneNumber.isEmpty() || userPhoneNumber.length < resources.getInteger(R.integer.phone_number_length) || !userPhoneNumber.startsWith("083")|| !userPhoneNumber.startsWith("085")|| !userPhoneNumber.startsWith("086")|| !userPhoneNumber.startsWith("087")|| !userPhoneNumber.startsWith("089")) {
                     binding.textInputLayoutSignUpPhoneNumber.error =
-                        "Phone number must be ${resources.getInteger(R.integer.phone_number_length)} characters" // Display an error message
+                        resources.getString(R.string.invalid_phone_number)
                 } else {
                     binding.textInputLayoutSignUpPhoneNumber.error =
                         null // Clear any previous error
@@ -198,32 +184,16 @@ class ClientSignUp : Fragment() {
             }
         }
 
-        binding.signUpAddressSelectMyLocation.setOnClickListener {
-            checkLocationPermission()
-        }
-
-        userCountryCode = binding.countryCodePicker.defaultCountryCodeWithPlus
-        binding.countryCodePicker.setOnCountryChangeListener {
-            userCountryCode = binding.countryCodePicker.selectedCountryCodeWithPlus
-            binding.countryCodePicker.setNumberAutoFormattingEnabled(true)
-        }
-        //userPhoneNumber = "$userCountryCode${binding.signUpPhoneNumber.text.toString().trim()}"
 
         binding.accountSignupBtnSignup.setOnClickListener {
 
-            Log.d(TAG, "onViewCreated: $userCountryCode")
-            
             userFirstName = binding.signUpFirstName.text.toString().trim()
             userLastName = binding.signUpLastName.text.toString().trim()
             userEmail = binding.signUpEmail.text.toString().trim()
-            userAddress = binding.signUpAddress.text.toString().trim()
             userPassword = binding.signUpPassword.text.toString().trim()
             userConfirmPassword = binding.signUpConfirmPassword.text.toString().trim()
-            userPhoneNumber = "$userCountryCode${binding.signUpPhoneNumber.text.toString().trim()}"
-            //userAddressLongitude, userAddressLatitude
+            userPhoneNumber = binding.signUpPhoneNumber.text.toString().trim()
 
-            if (userCountryCode != Common.IRISH_CODE)
-                requireContext().toast(resources.getString(R.string.irish_number_required))
 
             if (!firstNameOkay || !lastNameOkay || !emailOkay || !addressOkay || !phoneNumberOkay || !passwordOkay || !confirmPasswordOkay) {
                 requireContext().toast("Invalid input")
@@ -232,7 +202,6 @@ class ClientSignUp : Fragment() {
                 userFirstName.isEmpty() ||
                 userLastName.isEmpty() ||
                 userEmail.isEmpty() ||
-                userAddress.isEmpty() ||
                 userPassword.isEmpty() ||
                 userConfirmPassword.isEmpty() ||
                 userPhoneNumber.isEmpty()
@@ -243,9 +212,7 @@ class ClientSignUp : Fragment() {
                     userFirstName,
                     userLastName,
                     userEmail,
-                    userAddress,
                     userPassword,
-                    //userAddressLongitude, userAddressLatitude,
                     userPhoneNumber
                 )
             }
@@ -260,10 +227,7 @@ class ClientSignUp : Fragment() {
         userFirstName: String,
         userLastName: String,
         userEmail: String,
-        userAddress: String,
         userPassword: String,
-//        userAddressLongitude: String,
-//        userAddressLatitude: String,
         userPhoneNumber: String
     ) {
         val mAuth = FirebaseAuth.getInstance()
@@ -278,9 +242,6 @@ class ClientSignUp : Fragment() {
                         userFirstName,
                         userLastName,
                         userEmail,
-                        userAddress,
-//                        userAddressLongitude,
-//                        userAddressLatitude,
                         newUserId!!,
                         dateJoined,
                         userPhoneNumber
@@ -304,9 +265,6 @@ class ClientSignUp : Fragment() {
         userFirstName: String,
         userLastName: String,
         userEmail: String,
-        userAddress: String,
-//        userAddressLongitude: String,
-//        userAddressLatitude: String,
         newUserId: String,
         dateJoined: String,
         userPhoneNumber: String
@@ -315,9 +273,6 @@ class ClientSignUp : Fragment() {
             userFirstName,
             userLastName,
             userEmail,
-            userAddress,
-//            userAddressLongitude,
-//            userAddressLatitude,
             newUserId,
             dateJoined,
             userPhoneNumber
@@ -340,9 +295,6 @@ class ClientSignUp : Fragment() {
         userFirstName: String,
         userLastName: String,
         userEmail: String,
-        userAddress: String,
-//        userAddressLongitude: String,
-//        userAddressLatitude: String,
         newUserId: String,
         dateJoined: String,
         userPhoneNumber: String
@@ -352,9 +304,6 @@ class ClientSignUp : Fragment() {
             userFirstName = userFirstName,
             userLastName = userLastName,
             userEmail = userEmail,
-            userAddress = userAddress,
-            //userAddressLongitude = userAddressLongitude,
-            //userAddressLatitude = userAddressLatitude,
             dateJoined = dateJoined,
             userPhoneNumber = userPhoneNumber
         )
@@ -445,12 +394,7 @@ class ClientSignUp : Fragment() {
                 val currentLocation = getAddressFromLocation(location.latitude, location.longitude)
 //            userAddressLatitude = location.latitude.toString()
 //            userAddressLongitude = location.longitude.toString()
-                binding.signUpAddress.setText(
-                    getAddressFromLocation(
-                        location.latitude,
-                        location.longitude
-                    )
-                )
+
                 Log.d(TAG, "getLocation: $currentLocation")
                 Log.d(TAG, "getLocation: ${location.latitude}")
                 hideProgress()
