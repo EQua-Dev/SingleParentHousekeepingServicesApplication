@@ -18,7 +18,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Facility
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Service
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.snackbar
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.snackBar
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -125,7 +125,7 @@ class ClientNotification : Fragment() {
                         if(responseState == "accepted")
                             launchDetailDialog(model)
                         else
-                            requireView().snackbar("Your request is still pending")
+                            requireView().snackBar("Your request is still pending")
                     }
 
                     holder.clientBookingResponseRateServiceButton.setOnClickListener {

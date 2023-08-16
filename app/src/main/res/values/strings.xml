@@ -11,7 +11,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="sign_in_subtitle">Enter details to log in</string>
+    <string name="sign_in_subtitle">Enter log in credentials</string>
     <string name="account_btn_login">Log In</string>
     <string name="account_log_in_forgot_password_prompt">Forgotten Password? Reset Password here</string>
     <string name="sign_in_email">Username</string>
@@ -141,6 +141,9 @@
     <string name="service_start_date">Service Start Date</string>
     <string name="request_text">Dear Sirs,\n\nMy name is %s, %s, %s. I require your provided service %s, starting from %s.\n\nPlease let me know if you can accommodate my request.\n\nDate Created: %s\nTime Created: %s</string>
     <string name="submit_request">Submit Request</string>
+    <string name="invalid_password">A Strong Password Should be minimum of 8 characters in length, Containing upper and lower case letters, special characters and digits.</string>
+    <string name="invalid_email">A Valid Email Address should contain a valid email domain (gmail.com, hotmail.com, yahoo.com, outlook.com, live.com) and has the @ sign before it</string>
+    <string name="user_records_not_found">Username and password do not match. Please try again</string>
 
     <string-array name="service_available_places_option">
         <item>Yes</item>

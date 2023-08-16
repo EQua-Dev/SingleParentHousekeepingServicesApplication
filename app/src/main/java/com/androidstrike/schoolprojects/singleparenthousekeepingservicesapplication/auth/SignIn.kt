@@ -16,6 +16,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.clientName
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.enable
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgressDialog
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.snackBar
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.visible
 import com.google.firebase.auth.ktx.auth
@@ -169,7 +170,7 @@ class SignIn : Fragment() {
                 } else {
                     //pbLoading.visible(false)
                     hideProgress()
-                    activity?.toast(it.exception?.message.toString())
+                    requireView().snackBar(resources.getString(R.string.user_records_not_found))
                 }
             }
     }

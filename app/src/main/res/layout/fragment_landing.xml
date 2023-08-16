@@ -27,7 +27,7 @@
         android:layout_marginBottom="@dimen/padding_mini"
         app:backgroundTint="@color/custom_client_accent_color"
         android:text="@string/single_parent_role"
-        app:cornerRadius="@dimen/padding_mini" />
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/landing_button_facility_role"
@@ -41,6 +41,6 @@
         android:layout_marginBottom="@dimen/padding_mini"
         android:text="@string/house_keeping_facility_role"
         app:backgroundTint="@color/custom_facility_accent_color"
-        app:cornerRadius="@dimen/padding_mini" />
+        />
 
 </RelativeLayout>
