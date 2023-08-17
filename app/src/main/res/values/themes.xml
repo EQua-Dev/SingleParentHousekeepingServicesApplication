@@ -3,10 +3,16 @@
     <style name="Base.Theme.SingleParentHousekeepingServicesApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/open_dyslexic_regular</item>
     </style>
 
     <style name="Theme.SingleParentHousekeepingServicesApplication" parent="Base.Theme.SingleParentHousekeepingServicesApplication" />
     <style name="TabTextAppearance" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textSize">12sp</item>
     </style>
+
+<!--    <style name="CustomFont" parent="Base.Theme.SingleParentHousekeepingServicesApplication">-->
+<!--        <item name="android:fontFamily">@font/open_dyslexic_regular</item>-->
+<!--    </style>-->
+
 </resources>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/landingFragment">
+    app:startDestination="@id/splashScreen">
 
     <fragment
         android:id="@+id/landingFragment"
@@ -95,6 +95,15 @@
         tools:layout="@layout/fragment_client_base_screen" >
         <action
             android:id="@+id/action_clientBaseScreen_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.SplashScreen"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreen_to_landingFragment"
             app:destination="@id/landingFragment" />
     </fragment>
 </navigation>
