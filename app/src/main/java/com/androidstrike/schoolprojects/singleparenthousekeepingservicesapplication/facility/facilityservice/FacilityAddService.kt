@@ -3,6 +3,7 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,16 +37,16 @@ class FacilityAddService : Fragment() {
     private lateinit var serviceType: String
     private lateinit var serviceDiscountedPrice: String
     private lateinit var serviceAvailablePlacesOption: String
-    private lateinit var serviceStartEndDate: String
-    private lateinit var serviceSchedule: String
+    private lateinit var serviceFrequency: String
     private lateinit var serviceID: String
 
+    private var serviceTypesList: List<String> = listOf()
 
     private val calendar = Calendar.getInstance()
 
     private var progressDialog: Dialog? = null
 
-
+    private val TAG = "FacilityAddService"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,10 +61,52 @@ class FacilityAddService : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            val newServiceCategoryArray = resources.getStringArray(R.array.service_categories)
-            val newServiceCategoryArrayAdapter =
-                ArrayAdapter(requireContext(), R.layout.drop_down_item, newServiceCategoryArray)
-            facilityAddServiceCategory.setAdapter(newServiceCategoryArrayAdapter)
+
+//            val newServiceCategoryArray =
+//                listOf("Cleaning", "Deliveries")
+
+            val newServiceFrequencyArray =
+                resources.getStringArray(R.array.service_frequency)
+            val newServiceFrequencyArrayAdapter =
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_item,
+                    newServiceFrequencyArray
+                )
+            facilityAddServiceFrequency.setAdapter(newServiceFrequencyArrayAdapter)
+            Log.d(TAG, "onViewCreated: $newServiceFrequencyArray")
+
+
+            val newServiceTypesArrayAdapter =
+                ArrayAdapter(requireContext(), R.layout.drop_down_item, resources.getStringArray(R.array.new_service_categories_list))
+            facilityAddNewServiceCategory.setAdapter(newServiceTypesArrayAdapter)
+
+
+//
+            facilityAddNewServiceCategory.setOnItemClickListener { _, _, position, _ ->
+
+                when (newServiceTypesArrayAdapter.getItem(position)) {
+                    "Cleaning" -> {
+                        serviceTypesList =
+                            resources.getStringArray(R.array.cleaning_services).toList()
+                    }
+
+                    "Delivery" -> {
+                        serviceTypesList =
+                            resources.getStringArray(R.array.deliveries_services).toList()
+                    }
+                }
+
+                val newServiceCategoryArrayAdapter =
+                    ArrayAdapter(
+                        requireContext(),
+                        R.layout.drop_down_item,
+                        serviceTypesList
+                    )
+                facilityAddServiceType.setAdapter(newServiceCategoryArrayAdapter)
+
+            }
+
 
 
             val newServiceAvailablePlacesArray =
@@ -76,32 +119,16 @@ class FacilityAddService : Fragment() {
                 )
             facilityAddServiceAvailablePlaces.setAdapter(newServiceAvailablePlacesArrayAdapter)
 
-            val newServiceScheduleArray =
-                resources.getStringArray(R.array.service_frequency)
-            val newServiceScheduleArrayAdapter =
-                ArrayAdapter(
-                    requireContext(),
-                    R.layout.drop_down_item,
-                    newServiceScheduleArray
-                )
-            facilityAddServiceSchedule.setAdapter(newServiceScheduleArrayAdapter)
-
-
-            facilityAddServiceStartEndDate.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    showDatePicker(view)
-                }
-            }
 
             facilityAddServiceSubmitButton.setOnClickListener {
                 servicePrice = facilityAddServicePrice.text.toString().trim().ifEmpty { "0" }
                 serviceName = facilityAddServiceName.text.toString().trim()
-                serviceType = facilityAddServiceCategory.text.toString().trim()
-                serviceDiscountedPrice = facilityAddServiceDiscountedPrice.text.toString().trim().ifEmpty { "0" }
+                serviceType = facilityAddNewServiceCategory.text.toString().trim()
+                serviceDiscountedPrice =
+                    facilityAddServiceDiscountedPrice.text.toString().trim().ifEmpty { "0" }
                 serviceAvailablePlacesOption =
                     facilityAddServiceAvailablePlaces.text.toString().trim().ifEmpty { "No" }
-                serviceStartEndDate = facilityAddServiceStartEndDate.text.toString().trim()
-                serviceSchedule = facilityAddServiceSchedule.text.toString().trim()
+                serviceFrequency = facilityAddServiceFrequency.text.toString().trim()
                 serviceID = System.currentTimeMillis().toString()
                 serviceDetails = facilityAddServiceDetails.text.toString().trim()
 
@@ -109,13 +136,13 @@ class FacilityAddService : Fragment() {
             }
 
             facilityAddServiceNextServiceButton.setOnClickListener {
-                facilityAddServiceCategory.text.clear()
+                facilityAddNewServiceCategory.text.clear()
+                facilityAddServiceDetails.text!!.clear()
                 facilityAddServiceName.text!!.clear()
                 facilityAddServicePrice.text!!.clear()
                 facilityAddServiceDiscountedPrice.text!!.clear()
                 facilityAddServiceAvailablePlaces.text.clear()
-                facilityAddServiceStartEndDate.text!!.clear()
-                facilityAddServiceSchedule.text!!.clear()
+                facilityAddServiceFrequency.text!!.clear()
                 facilityAddServiceDetails.text!!.clear()
 
                 requireContext().toast("Enter new service details")
@@ -129,14 +156,14 @@ class FacilityAddService : Fragment() {
 
     private fun validateInputs() {
         with(binding) {
-            textInputLayoutFacilityAddServiceCategory.error = null
+            textInputLayoutFacilityAddNewServiceCategory.error = null
             textInputLayoutFacilityAddServiceName.error = null
             textInputLayoutFacilityAddServiceDetails.error = null
             textInputLayoutFacilityAddServiceAvailablePlaces.error = null
 
             if (serviceType.isEmpty()) {
-                textInputLayoutFacilityAddServiceCategory.error = "Select Service Type"
-                facilityAddServiceCategory.requestFocus()
+                textInputLayoutFacilityAddNewServiceCategory.error = "Select Service Type"
+                facilityAddNewServiceCategory.requestFocus()
                 return
             }
 //            if (servicePrice.isEmpty()) {
@@ -160,10 +187,10 @@ class FacilityAddService : Fragment() {
                 facilityAddServiceAvailablePlaces.requestFocus()
                 return
             } else {
-                textInputLayoutFacilityAddServiceCategory.error = null
-                    textInputLayoutFacilityAddServiceName.error = null
-                    textInputLayoutFacilityAddServiceDetails.error = null
-                    textInputLayoutFacilityAddServiceAvailablePlaces.error = null
+                textInputLayoutFacilityAddNewServiceCategory.error = null
+                textInputLayoutFacilityAddServiceName.error = null
+                textInputLayoutFacilityAddServiceDetails.error = null
+                textInputLayoutFacilityAddServiceAvailablePlaces.error = null
                 createService()
             }
 
@@ -177,13 +204,14 @@ class FacilityAddService : Fragment() {
                 val addService = Service(
 
                     serviceId = serviceID,
-                            serviceName = serviceName,
-                            serviceType = serviceType,
-                            serviceOrganisationOwner = auth.uid!!,
-                            serviceDetail = serviceDetails,
-                            servicePrice = servicePrice,
-                            serviceDiscountedPrice = serviceDiscountedPrice,
-                            serviceAvailablePlace = serviceAvailablePlacesOption
+                    serviceName = serviceName,
+                    serviceType = serviceType,
+                    serviceOrganisationOwner = auth.uid!!,
+                    serviceDetail = serviceDetails,
+                    servicePrice = servicePrice,
+                    serviceDiscountedPrice = serviceDiscountedPrice,
+                    serviceAvailablePlace = serviceAvailablePlacesOption,
+                    serviceFrequency = serviceFrequency
 
                 )
 
@@ -192,13 +220,13 @@ class FacilityAddService : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     with(binding) {
-                        facilityAddServiceCategory.text.clear()
+                        facilityAddNewServiceCategory.text.clear()
                         facilityAddServiceName.text!!.clear()
+                        facilityAddServiceDetails.text!!.clear()
                         facilityAddServicePrice.text!!.clear()
                         facilityAddServiceDiscountedPrice.text!!.clear()
                         facilityAddServiceAvailablePlaces.text.clear()
-                        facilityAddServiceStartEndDate.text!!.clear()
-                        facilityAddServiceSchedule.text!!.clear()
+                        facilityAddServiceFrequency.text!!.clear()
                     }
                     hideProgress()
                     requireView().snackBar("Service Added")

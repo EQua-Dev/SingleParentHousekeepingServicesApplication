@@ -179,7 +179,7 @@ class FacilityProfile : Fragment() {
         val documentRef = Common.facilityCollectionRef.document(model.organisationID)
 
         val updates = hashMapOf<String, Any>(
-            "organisationPhoneNumber" to newNumber,
+            "organisationContactNumber" to newNumber,
         )
 
         documentRef.update(updates)

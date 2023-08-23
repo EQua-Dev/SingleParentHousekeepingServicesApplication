@@ -9,4 +9,6 @@ data class Service(
     val servicePrice: String = "",
     val serviceDiscountedPrice: String = "",
     val serviceAvailablePlace: String = "",
+    val serviceFrequency: String = "",
+
 )

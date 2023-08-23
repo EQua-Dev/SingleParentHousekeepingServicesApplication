@@ -59,7 +59,7 @@ class FacilityAddServiceSpecialist : Fragment() {
 
         with(binding) {
             val newServiceSpecialistCategoryArray =
-                resources.getStringArray(R.array.service_categories)
+                resources.getStringArray(R.array.new_service_categories_list)
             val newServiceSpecialistCategoryArrayAdapter =
                 ArrayAdapter(
                     requireContext(),

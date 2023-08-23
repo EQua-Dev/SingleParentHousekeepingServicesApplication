@@ -34,22 +34,22 @@
                 android:layout_margin="@dimen/padding_midi"
                 android:orientation="vertical">
 
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_facility_add_service_category"
+                    android:id="@+id/text_input_layout_facility_add_new_service_category"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/custom_facility_accent_color">
 
                     <AutoCompleteTextView
-                        android:id="@+id/facility_add_service_category"
+                        android:id="@+id/facility_add_new_service_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/facility_add_service_category"
                         android:inputType="none"
-                        />
+                        android:padding="@dimen/padding_mini" />
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_facility_add_service_type"
@@ -175,6 +175,8 @@
                         android:inputType="none"
                         android:padding="@dimen/padding_mini" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+
 
             </LinearLayout>
         </ScrollView>
