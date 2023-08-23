@@ -155,6 +155,8 @@
     <string name="facility_add_service_next_specialist_button">Next Specialist</string>
     <string name="facility_add_service_type">Select Type of Service within chosen Service Category</string>
     <string name="facility_add_service_frequency">Select Service Frequency</string>
+    <string name="book_appointment_service_category">Select Service Category</string>
+    <string name="book_appointment_service_type">Select Service Type</string>
 
     <string-array name="service_available_places_option">
         <item>Yes</item>

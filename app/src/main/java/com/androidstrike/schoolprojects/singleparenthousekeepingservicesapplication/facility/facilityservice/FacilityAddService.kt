@@ -35,6 +35,7 @@ class FacilityAddService : Fragment() {
     private lateinit var serviceName: String
     private lateinit var serviceDetails: String
     private lateinit var serviceType: String
+    private lateinit var serviceCategoryType: String
     private lateinit var serviceDiscountedPrice: String
     private lateinit var serviceAvailablePlacesOption: String
     private lateinit var serviceFrequency: String
@@ -124,6 +125,7 @@ class FacilityAddService : Fragment() {
                 servicePrice = facilityAddServicePrice.text.toString().trim().ifEmpty { "0" }
                 serviceName = facilityAddServiceName.text.toString().trim()
                 serviceType = facilityAddNewServiceCategory.text.toString().trim()
+                serviceCategoryType = facilityAddServiceType.text.toString().trim()
                 serviceDiscountedPrice =
                     facilityAddServiceDiscountedPrice.text.toString().trim().ifEmpty { "0" }
                 serviceAvailablePlacesOption =
@@ -137,7 +139,7 @@ class FacilityAddService : Fragment() {
 
             facilityAddServiceNextServiceButton.setOnClickListener {
                 facilityAddNewServiceCategory.text.clear()
-                facilityAddServiceDetails.text!!.clear()
+                facilityAddServiceType.text!!.clear()
                 facilityAddServiceName.text!!.clear()
                 facilityAddServicePrice.text!!.clear()
                 facilityAddServiceDiscountedPrice.text!!.clear()
@@ -211,7 +213,8 @@ class FacilityAddService : Fragment() {
                     servicePrice = servicePrice,
                     serviceDiscountedPrice = serviceDiscountedPrice,
                     serviceAvailablePlace = serviceAvailablePlacesOption,
-                    serviceFrequency = serviceFrequency
+                    serviceFrequency = serviceFrequency,
+                    serviceCategoryType = serviceCategoryType
 
                 )
 

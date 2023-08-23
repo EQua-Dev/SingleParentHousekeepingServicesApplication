@@ -6,6 +6,7 @@ data class BookService(
     val facilityId: String = "",
     val selectedAppointmentServiceID: String = "",
     val selectedAppointmentServiceName: String = "",
+    val selectedAppointmentServiceType: String = "",
 //    val selectedAppointmentSpecialistID: String = "",
 //    val selectedAppointmentSpecificServiceName: String = "",
     val selectedAppointmentServicePrice: String = "",

@@ -59,15 +59,20 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
     //private lateinit var selectedAppointmentDescription: String
     private lateinit var dateBooked: String
     private lateinit var client: String
+    private lateinit var facility: Facility
+
     //private lateinit var facilityId: String
 
     private val calendar = Calendar.getInstance()
 
     private val facilityServices: MutableList<Service> = mutableListOf()
     private val facilityServicesNames: MutableList<String> = mutableListOf()
-//    private val facilitySpecificServices: MutableList<SpecificService> = mutableListOf()
+    private val facilityServicesTypes: MutableList<String> = mutableListOf()
+
+    //    private val facilitySpecificServices: MutableList<SpecificService> = mutableListOf()
     private val facilitySpecificServicesNames: MutableList<String> = mutableListOf()
-//    private val facilitySpecialists: MutableList<Specialists> = mutableListOf()
+
+    //    private val facilitySpecialists: MutableList<Specialists> = mutableListOf()
     private val facilitySpecialistsNames: MutableList<String> = mutableListOf()
 
 
@@ -86,28 +91,36 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val facility = arguments?.getParcelable<Facility>(ARG_FACILITY_DATA)
+        facility = arguments?.getParcelable<Facility>(ARG_FACILITY_DATA)!!
 
         if (facility != null) {
 
             getFacilityServiceDetails(facility.organisationID)
 
-            val bottomSheetBookButton = view.findViewById<Button>(R.id.book_btn)
-            val bottomSheetFacilityName = view.findViewById<TextView>(R.id.facility_name)
-            val bottomSheetFacilityAddress =
-                view.findViewById<TextView>(R.id.facility_address)
-            val bottomSheetFacilityEmail =
-                view.findViewById<TextView>(R.id.facility_email)
-            val bottomSheetFacilityPhone =
-                view.findViewById<TextView>(R.id.facility_phone)
-            val bottomSheetFacilityPhoneImage =
-                view.findViewById<ImageView>(R.id.img_map_facility_phone)
-            val bottomSheetFacilityDirectionImage =
-                view.findViewById<ImageView>(R.id.img_map_facility_direction)
-            val bottomSheetFacilityEmailImage =
-                view.findViewById<ImageView>(R.id.img_map_facility_email)
-            val bottomSheetBookAppointmentServiceTextView =
-                view.findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service)
+
+        }
+    }
+
+    private fun loadView() {
+
+        val bottomSheetBookButton = requireView().findViewById<Button>(R.id.book_btn)
+        val bottomSheetFacilityName = requireView().findViewById<TextView>(R.id.facility_name)
+        val bottomSheetFacilityAddress =
+            requireView().findViewById<TextView>(R.id.facility_address)
+        val bottomSheetFacilityEmail =
+            requireView().findViewById<TextView>(R.id.facility_email)
+        val bottomSheetFacilityPhone =
+            requireView().findViewById<TextView>(R.id.facility_phone)
+        val bottomSheetFacilityPhoneImage =
+            requireView().findViewById<ImageView>(R.id.img_map_facility_phone)
+        val bottomSheetFacilityDirectionImage =
+            requireView().findViewById<ImageView>(R.id.img_map_facility_direction)
+        val bottomSheetFacilityEmailImage =
+            requireView().findViewById<ImageView>(R.id.img_map_facility_email)
+        val bottomSheetBookAppointmentServiceTextView =
+            requireView().findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service)
+        val bottomSheetBookAppointmentServiceTypeTextView =
+            requireView().findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service_type)
 
 
 //            val bottomSheetBookAppointmentDate =
@@ -117,74 +130,78 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 //            val bottomSheetBookAppointmentDescription =
 //                view.findViewById<TextInputEditText>(R.id.et_book_appointment_description)
 
-            bottomSheetFacilityName.text = facility.organisationName
-            bottomSheetFacilityAddress.text = facility.organisationPhysicalAddress
-            bottomSheetFacilityEmail.text = facility.organisationEmail
-            bottomSheetFacilityPhone.text = facility.organisationContactNumber
+        bottomSheetFacilityName.text = facility.organisationName
+        bottomSheetFacilityAddress.text = facility.organisationPhysicalAddress
+        bottomSheetFacilityEmail.text = facility.organisationEmail
+        bottomSheetFacilityPhone.text = facility.organisationContactNumber
 
 
 
-            Log.d("EQUA", "onViewCreated: $facilityServicesNames")
-            Log.d("EQUA", "onViewCreated: $facilityServices")
+        Log.d("EQUA", "onViewCreated: $facilityServicesNames")
+        Log.d("EQUA", "onViewCreated: $facilityServices")
 
-            val newRehabServicesArrayAdapter =
+        val newRehabServicesArrayAdapter =
+            ArrayAdapter(requireContext(), R.layout.drop_down_item, facilityServicesTypes)
+        bottomSheetBookAppointmentServiceTextView.setAdapter(newRehabServicesArrayAdapter)
+
+        bottomSheetBookAppointmentServiceTextView.setOnItemClickListener { _, _, position, _ ->
+            val selectedItem =
+                newRehabServicesArrayAdapter.getItem(position) // Get the selected item
+
+            var serviceId = ""
+
+            for (service in facilityServices)
+                if (selectedItem == service.serviceType)
+                    facilityServicesNames.add(service.serviceCategoryType)
+
+            //getFacilitySpecificServiceDetails(facility.facilityId, serviceId)
+            val newRehabServiceNamesArrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.drop_down_item, facilityServicesNames)
-            bottomSheetBookAppointmentServiceTextView.setAdapter(newRehabServicesArrayAdapter)
+            bottomSheetBookAppointmentServiceTypeTextView.setAdapter(newRehabServiceNamesArrayAdapter)
 
-//            bottomSheetBookAppointmentServiceTextView.setOnItemClickListener { _, _, position, _ ->
-//                val selectedItem =
-//                    newRehabServicesArrayAdapter.getItem(position) // Get the selected item
-//
-//                var serviceId = ""
-//
-//                for (service in facilityServices)
-//                    if (selectedItem == service.serviceName)
-//                        serviceId = service.serviceID
-//
-//                getFacilitySpecificServiceDetails(facility.facilityId, serviceId)
-//
-//            }
-            bottomSheetBookButton.setOnClickListener {
-                var selectedServiceId = ""
+        }
+        bottomSheetBookButton.setOnClickListener {
+            var selectedServiceId = ""
 //                var selectedSpecialistId = ""
-                var selectedSpecificServicePrice = ""
-                var selectedSpecificServiceDiscountPrice = ""
-                var selectedAppointmentServiceAvailablePlaces = ""
-                for (service in facilityServices)
-                    if (bottomSheetBookAppointmentServiceTextView.text.toString() == service.serviceName)
-                        selectedServiceId = service.serviceId
+            var selectedSpecificServicePrice = ""
+            var selectedSpecificServiceDiscountPrice = ""
+            var selectedAppointmentServiceAvailablePlaces = ""
+            for (service in facilityServices)
+                if (bottomSheetBookAppointmentServiceTextView.text.toString() == service.serviceName)
+                    selectedServiceId = service.serviceId
 //                for (specialist in facilitySpecialists)
 //                    if (bottomSheetBookAppointmentSpecialistsTextView.text.toString() == specialist.name)
 //                        selectedSpecialistId = specialist.id
-                for (service in facilityServices)
-                    if (bottomSheetBookAppointmentServiceTextView.text.toString() == service.serviceName) {
-                        selectedSpecificServicePrice = service.servicePrice
-                        selectedSpecificServiceDiscountPrice =
-                            service.serviceDiscountedPrice
-                        selectedAppointmentServiceAvailablePlaces =
-                            service.serviceAvailablePlace
+            for (service in facilityServices)
+                if (bottomSheetBookAppointmentServiceTextView.text.toString() == service.serviceName) {
+                    selectedSpecificServicePrice = service.servicePrice
+                    selectedSpecificServiceDiscountPrice =
+                        service.serviceDiscountedPrice
+                    selectedAppointmentServiceAvailablePlaces =
+                        service.serviceAvailablePlace
 
-                    }
-                val bookService = BookService(
-                    requestFormId = UUID.randomUUID().toString(),
-                    clientId = auth.uid!!,
-                    facilityId = facility.organisationID,
-                    selectedAppointmentServiceID = selectedServiceId,
-                    selectedAppointmentServiceName = bottomSheetBookAppointmentServiceTextView.text.toString(),
-                    selectedAppointmentServicePrice = selectedSpecificServicePrice,
-                    selectedAppointmentServiceDiscountedPrice = selectedSpecificServiceDiscountPrice,
-                    selectedAppointmentServiceAvailablePlaces = selectedAppointmentServiceAvailablePlaces,
+                }
+            val bookService = BookService(
+                requestFormId = UUID.randomUUID().toString(),
+                clientId = auth.uid!!,
+                facilityId = facility.organisationID,
+                selectedAppointmentServiceID = selectedServiceId,
+                selectedAppointmentServiceType = bottomSheetBookAppointmentServiceTextView.text.toString(),
+                selectedAppointmentServiceName = bottomSheetBookAppointmentServiceTypeTextView.text.toString(),
+                selectedAppointmentServicePrice = selectedSpecificServicePrice,
+                selectedAppointmentServiceDiscountedPrice = selectedSpecificServiceDiscountPrice,
+                selectedAppointmentServiceAvailablePlaces = selectedAppointmentServiceAvailablePlaces,
 //                            selectedAppointmentDate = ,
 //                            selectedAppointmentRequestText = ,
 //                            dateCreated = ,
 //                            timeCreated = ,
 //                            requestStatus = ,
-                )
-                launchPlaceRequestDialog(bookService)
+            )
+            launchPlaceRequestDialog(bookService)
 //                val mAuth = FirebaseAuth.getInstance()
 
-                // book fragment
-                //showProgress()
+            // book fragment
+            //showProgress()
 
 //                selectedAppointmentServiceName =
 //                    bottomSheetBookAppointmentServiceTextView.text.toString().trim()
@@ -192,8 +209,8 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 //                selectedAppointmentTime = bottomSheetBookAppointmentTime.text.toString().trim()
 //                selectedAppointmentDescription =
 //                    bottomSheetBookAppointmentDescription.text.toString().trim()
-                //dateBooked = System.currentTimeMillis().toString()
-                //client = mAuth.currentUser!!.uid
+            //dateBooked = System.currentTimeMillis().toString()
+            //client = mAuth.currentUser!!.uid
 
 //
 //                for (service in facilityServices) {
@@ -211,27 +228,25 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 //                    client,
 //                    facility.facilityId
 //                )
-            }
+        }
 
-            bottomSheetFacilityPhoneImage.setOnClickListener {
-                // navigate to phone call
-                val dialIntent = Intent(Intent.ACTION_DIAL)
-                //dialIntent.data = Uri.fromParts("tel",phoneNumber,null)
-                dialIntent.data = Uri.fromParts("tel", facility.organisationContactNumber, null)
-                startActivity(dialIntent)
-
-            }
-
-            bottomSheetFacilityDirectionImage.setOnClickListener {
-                // navigate to maps direction
-            }
-
-            bottomSheetFacilityEmailImage.setOnClickListener {
-                // navigate to email
-            }
-
+        bottomSheetFacilityPhoneImage.setOnClickListener {
+            // navigate to phone call
+            val dialIntent = Intent(Intent.ACTION_DIAL)
+            //dialIntent.data = Uri.fromParts("tel",phoneNumber,null)
+            dialIntent.data = Uri.fromParts("tel", facility.organisationContactNumber, null)
+            startActivity(dialIntent)
 
         }
+
+        bottomSheetFacilityDirectionImage.setOnClickListener {
+            // navigate to maps direction
+        }
+
+        bottomSheetFacilityEmailImage.setOnClickListener {
+            // navigate to email
+        }
+
     }
 
     private fun launchPlaceRequestDialog(bookService: BookService) {
@@ -392,7 +407,8 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 //val appointmentQuery = Common.facilityCollectionRef.whereEqualTo("facilityId", facility.facilityId).get().await()
-                Common.appointmentsCollectionRef.document(bookService.requestFormId).set(bookService)
+                Common.appointmentsCollectionRef.document(bookService.requestFormId)
+                    .set(bookService)
 
                 withContext(Dispatchers.Main) {
                     hideProgress()
@@ -412,19 +428,19 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
         CoroutineScope(Dispatchers.IO).launch {
             Log.d("EQUA", "getFacilityServiceDetails: $facilityId")
 
-            Common.facilityCollectionRef.document(facilityId).collection(SERVICES)
+            Common.servicesCollectionRef
                 .get()
                 .addOnSuccessListener { querySnapshot: QuerySnapshot ->
 
                     for (document in querySnapshot.documents) {
                         val item = document.toObject(Service::class.java)
 
-                        if (item != null) {
+                        if (item != null && item.serviceOrganisationOwner == facilityId) {
                             facilityServices.add(item)
                         }
                         Log.d("EQUA", "getFacilityServiceDetails: $facilityServices")
                         for (service in facilityServices) {
-                            facilityServicesNames.add(service.serviceName)
+                            facilityServicesTypes.add(service.serviceType)
                         }
 
 
@@ -433,7 +449,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 
                     }
                     //getFacilitySpecialistsDetails(facilityId)
-
+                    loadView()
                     hideProgress()
                     //hideProgress()
                 }
