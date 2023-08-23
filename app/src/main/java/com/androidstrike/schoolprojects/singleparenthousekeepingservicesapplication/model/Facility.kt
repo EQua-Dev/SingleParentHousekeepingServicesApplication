@@ -5,14 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Facility(
-    val facilityName: String = "",
-    val facilityEmail: String = "",
-    val facilityAddress: String = "",
-    val facilityAddressLongitude: String = "",
-    val facilityAddressLatitude: String = "",
-    val facilityPhoneNumber: String = "",
-    val facilityId: String = "",
+    val organisationName: String = "",
+    val organisationEmail: String = "",
+    val organisationPhysicalAddress: String = "",
+    val organisationLongitude: String = "",
+    val organisationLatitude: String = "",
+    val organisationContactNumber: String = "",
+    val organisationID: String = "",
     val dateJoined: String = "",
     val role: String = "facility",
-    val services: List<String> = listOf()
 ): Parcelable

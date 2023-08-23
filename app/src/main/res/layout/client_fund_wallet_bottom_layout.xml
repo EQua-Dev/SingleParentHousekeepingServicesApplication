@@ -41,7 +41,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_fund_digital_wallet_amount"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"

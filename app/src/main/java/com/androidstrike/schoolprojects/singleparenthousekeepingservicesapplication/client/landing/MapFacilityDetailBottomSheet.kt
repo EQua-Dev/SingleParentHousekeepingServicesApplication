@@ -90,7 +90,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 
         if (facility != null) {
 
-            getFacilityServiceDetails(facility.facilityId)
+            getFacilityServiceDetails(facility.organisationID)
 
             val bottomSheetBookButton = view.findViewById<Button>(R.id.book_btn)
             val bottomSheetFacilityName = view.findViewById<TextView>(R.id.facility_name)
@@ -117,10 +117,10 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 //            val bottomSheetBookAppointmentDescription =
 //                view.findViewById<TextInputEditText>(R.id.et_book_appointment_description)
 
-            bottomSheetFacilityName.text = facility.facilityName
-            bottomSheetFacilityAddress.text = facility.facilityAddress
-            bottomSheetFacilityEmail.text = facility.facilityEmail
-            bottomSheetFacilityPhone.text = facility.facilityPhoneNumber
+            bottomSheetFacilityName.text = facility.organisationName
+            bottomSheetFacilityAddress.text = facility.organisationPhysicalAddress
+            bottomSheetFacilityEmail.text = facility.organisationEmail
+            bottomSheetFacilityPhone.text = facility.organisationContactNumber
 
 
 
@@ -152,7 +152,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
                 var selectedAppointmentServiceAvailablePlaces = ""
                 for (service in facilityServices)
                     if (bottomSheetBookAppointmentServiceTextView.text.toString() == service.serviceName)
-                        selectedServiceId = service.serviceID
+                        selectedServiceId = service.serviceId
 //                for (specialist in facilitySpecialists)
 //                    if (bottomSheetBookAppointmentSpecialistsTextView.text.toString() == specialist.name)
 //                        selectedSpecialistId = specialist.id
@@ -162,13 +162,13 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
                         selectedSpecificServiceDiscountPrice =
                             service.serviceDiscountedPrice
                         selectedAppointmentServiceAvailablePlaces =
-                            service.serviceAvailablePlacesOption
+                            service.serviceAvailablePlace
 
                     }
                 val bookService = BookService(
                     requestFormId = UUID.randomUUID().toString(),
                     clientId = auth.uid!!,
-                    facilityId = facility.facilityId,
+                    facilityId = facility.organisationID,
                     selectedAppointmentServiceID = selectedServiceId,
                     selectedAppointmentServiceName = bottomSheetBookAppointmentServiceTextView.text.toString(),
                     selectedAppointmentServicePrice = selectedSpecificServicePrice,
@@ -217,7 +217,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
                 // navigate to phone call
                 val dialIntent = Intent(Intent.ACTION_DIAL)
                 //dialIntent.data = Uri.fromParts("tel",phoneNumber,null)
-                dialIntent.data = Uri.fromParts("tel", facility.facilityPhoneNumber, null)
+                dialIntent.data = Uri.fromParts("tel", facility.organisationContactNumber, null)
                 startActivity(dialIntent)
 
             }

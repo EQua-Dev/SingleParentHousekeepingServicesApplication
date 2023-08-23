@@ -7,26 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Service
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
 class FundWalletBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var selectedAppointmentServiceName: String
-    private lateinit var selectedAppointmentServiceID: String
-    private lateinit var selectedAppointmentDate: String
-    private lateinit var selectedAppointmentTime: String
-    private lateinit var selectedAppointmentDescription: String
-    private lateinit var dateBooked: String
-    private lateinit var client: String
-    //private lateinit var facilityId: String
 
     private val calendar = Calendar.getInstance()
-
-    val facilityServices: MutableList<Service> = mutableListOf()
-    val facilityServicesNames: MutableList<String> = mutableListOf()
-
 
     private var progressDialog: Dialog? = null
 

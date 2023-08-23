@@ -139,7 +139,7 @@ class SignIn : Fragment() {
                                         facilityRef.get()
                                             .addOnSuccessListener { documentSnapshot ->
                                                 if (documentSnapshot.exists()) {
-                                                    Common.facilityName = documentSnapshot.getString("facilityName")!!
+                                                    Common.facilityName = documentSnapshot.getString("organisationName")!!
                                                     // Use the value here
                                                 }
                                             }
@@ -148,8 +148,8 @@ class SignIn : Fragment() {
                                             }
                                     }
                                     requireContext().toast("Sign In Success")
-//                                    val navToFacilityHome = SignInDirections.actionSignInToFacilityBaseScreen()
-//                                    findNavController().navigate(navToFacilityHome)
+                                    val navToFacilityHome = SignInDirections.actionSignInToFacilityBaseScreen()
+                                    findNavController().navigate(navToFacilityHome)
 
                                 }
 

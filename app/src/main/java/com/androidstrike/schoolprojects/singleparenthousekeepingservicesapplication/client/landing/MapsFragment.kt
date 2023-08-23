@@ -99,14 +99,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             LatLng(
 //                                52.66087,
 //                                -8.63479
-                                facility.facilityAddressLatitude.toDouble(),
-                                facility.facilityAddressLongitude.toDouble()
+                                facility.organisationLatitude.toDouble(),
+                                facility.organisationLongitude.toDouble()
                             )
                         )
 //                        .title("facilityName")
-                        .title(facility.facilityName)
+                        .title(facility.organisationName)
 //                        .snippet("1 Steamboat Quay, Dock Rd, Limerick, V94 YF84")
-                        .snippet(facility.facilityAddress)
+                        .snippet(facility.organisationPhysicalAddress)
                     googleMap.addMarker(markerOptions)
 
                     //Log.d("EQUA", "onMapReady: ${facility.facilityName}")
@@ -137,8 +137,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         googleMap.setOnMarkerClickListener { marker ->
             for (facility in facilityList){
-                if (marker.title == facility.facilityName){
-                    requireContext().toast(facility.facilityEmail)
+                if (marker.title == facility.organisationName){
+                    requireContext().toast(facility.organisationEmail)
                     val bottomSheetFragment = MapFacilityDetailBottomSheet.newInstance(facility)
                     bottomSheetFragment.show(childFragmentManager, "bottomSheetTag")
                     //displayBottomSheet(facility)

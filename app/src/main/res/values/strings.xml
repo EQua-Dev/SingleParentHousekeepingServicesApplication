@@ -73,13 +73,13 @@
     <string name="profile_services">Services</string>
     <string name="feedback_placeholder"><![CDATA[Place Feedback & Ratings]]></string>
     <string name="invoice_placeholder">View Invoices / Provide Payment</string>
-    <string name="wallet_placeholder">Digital Wallet</string>
+    <string name="wallet_title">Create and Fund Digital Wallet for Customer</string>
     <string name="notification_placeholder">View Notification</string>
     <string name="facility_add_service_title">Add Service to Facility Profile</string>
-    <string name="facility_add_service_category">Category</string>
+    <string name="facility_add_service_category">Select Category of Provided Service</string>
     <string name="facility_add_service_description">Service Name</string>
     <string name="facility_add_service_price">Service Price (€)</string>
-    <string name="facility_add_service_discounted_price">Discounted Price (%) (leave empty if nil)</string>
+    <string name="facility_add_service_discounted_price">Service Discounted Price (€)</string>
     <string name="add_service_available_places">Service Available Places</string>
     <string name="facility_add_service_start_end_date">Start-End Date (if applicable)</string>
     <string name="facility_add_service_schedule">Service Schedule (if applicable)</string>
@@ -115,8 +115,8 @@
     <string name="password_does_not_match">Entered Password and Retyped password do not match, please retype the correct value</string>
     <string name="create_digital_wallet">Create Digital Wallet</string>
     <string name="fund_digital_wallet">Fund Digital Wallet</string>
-    <string name="fund_digital_wallet_amount_title">"Amount ($): "</string>
-    <string name="fund_digital_wallet_amount">Enter amount</string>
+    <string name="fund_digital_wallet_amount_title">Amount (EUR): </string>
+    <string name="fund_digital_wallet_amount">Enter amount to fund</string>
     <string name="fund_wallet_proceed">Proceed</string>
     <string name="fund_wallet_cancel">Cancel</string>
     <string name="rating_customer_name">Enter Your Name</string>
@@ -144,6 +144,17 @@
     <string name="invalid_password">A Strong Password Should be minimum of 8 characters in length, Containing upper and lower case letters, special characters and digits.</string>
     <string name="invalid_email">A Valid Email Address should contain a valid email domain (gmail.com, hotmail.com, yahoo.com, outlook.com, live.com) and has the @ sign before it</string>
     <string name="user_records_not_found">Username and password do not match. Please try again</string>
+    <string name="money_text">€%s</string>
+    <string name="missing_fields">Fill out all fields</string>
+    <string name="facility_add_service_details">Service Details</string>
+    <string name="facility_add_service_specialist_title">Add Specialist</string>
+    <string name="facility_add_service_specialist_service">Select Specialist Service</string>
+    <string name="facility_add_service_specialist_name">Specialist Name</string>
+    <string name="facility_add_service_specialist_qualification">Specialist Qualification</string>
+    <string name="facility_add_specialist_image">Specialist Image</string>
+    <string name="facility_add_service_next_specialist_button">Next Specialist</string>
+    <string name="facility_add_service_type">Select Type of Service within chosen Service Category</string>
+    <string name="facility_add_service_frequency">Select Service Frequency</string>
 
     <string-array name="service_available_places_option">
         <item>Yes</item>
@@ -151,12 +162,27 @@
     </string-array>
 
     <string-array name="service_categories">
-        <item>Inpatient Treatment</item>
-        <item>Outpatient Treatment</item>
-        <item>Detoxification Services</item>
-        <item>Counselling Services</item>
-        <item>AA 12-step Program</item>
-        <item>Cognitive Behavioural Therapy (CBT)</item>
-        <item>Spiritual/Religious Services</item>
+        <item>Cleaning</item>
+        <item>Delivery</item>
+    </string-array>
+
+    <string-array name="cleaning_services">
+        <item>Everyday Cleaning (Dishes, Floors, Rug, Toilet, Bath)</item>
+        <item>Deep Clean (Cupboards, Tiles. Fridge/Freezers, Oven)</item>
+        <item>Laundry</item>
+        <item>Ironing</item>
+    </string-array>
+
+    <string-array name="deliveries_services">
+        <item>Food (Takeaway, Restaurants)</item>
+        <item>Products</item>
+    </string-array>
+
+    <string-array name="service_frequency">
+        <item>Once Off</item>
+        <item>Daily (Mon - Sat)</item>
+        <item>Once a Week</item>
+        <item>Bi-weekly</item>
+        <item>Monthly</item>
     </string-array>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
 import com.google.android.material.snackbar.Snackbar
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -178,4 +179,18 @@ fun convertISODateToMillis(isoDate: String): Long {
     return date!!.time
 
 }
+
+fun hashString(input: String): String {
+    val messageDigest = MessageDigest.getInstance("MD5")
+    val bytes = messageDigest.digest(input.toByteArray())
+    val stringBuilder = StringBuilder()
+
+    for (byte in bytes) {
+        // Convert each byte to a hex string
+        stringBuilder.append(String.format("%02x", byte))
+    }
+
+    return stringBuilder.toString()
+}
+
 

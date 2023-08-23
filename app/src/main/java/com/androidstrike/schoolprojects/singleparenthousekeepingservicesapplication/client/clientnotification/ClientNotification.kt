@@ -22,7 +22,6 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -192,7 +191,7 @@ class ClientNotification : Fragment() {
 
                 for (document in querySnapshot.documents) {
                     val item = document.toObject(Service::class.java)
-                    if (item?.serviceID == serviceId) {
+                    if (item?.serviceId == serviceId) {
                         scheduledService = item
                     }
                 }
@@ -213,13 +212,13 @@ class ClientNotification : Fragment() {
                 for (document in querySnapshot.documents) {
                     Log.d("EQUA", "getRealtimeRehabs: $document")
                     val item = document.toObject(Facility::class.java)
-                    if (item?.facilityId == facilityId) {
+                    if (item?.organisationID == facilityId) {
                         respondingFacility = item
                     }
                 }
-                facilityName.text = respondingFacility.facilityName
-                facilityEmail.text = respondingFacility.facilityEmail
-                facilityPhone.text = respondingFacility.facilityPhoneNumber
+                facilityName.text = respondingFacility.organisationName
+                facilityEmail.text = respondingFacility.organisationEmail
+                facilityPhone.text = respondingFacility.organisationContactNumber
             }
     }
 }

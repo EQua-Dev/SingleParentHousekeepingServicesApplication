@@ -16,6 +16,7 @@ data class BookService(
     var dateCreated: String = "",
     var timeCreated: String = "",
     val requestStatus: String = "pending",
+    val invoiceGenerated: Boolean = false
 //    val selectedAppointmentServiceName: String = "",
 //    val selectedAppointmentServiceID: String = "",
 //    val selectedAppointmentDate: String = "",
