@@ -2,6 +2,8 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,10 +16,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.databinding.FragmentClientNotificationBinding
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.BookService
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Facility
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.FacilityRequestResponse
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Service
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.ACCEPTED_TEXT
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.hideProgress
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.snackBar
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -27,11 +32,14 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 class ClientNotification : Fragment() {
 
-    var clientBookingResponseScreenAdapter: FirestoreRecyclerAdapter<BookService, ClientBookingResponseScreenAdapter>? = null
+    var clientBookingResponseScreenAdapter: FirestoreRecyclerAdapter<FacilityRequestResponse, ClientBookingResponseScreenAdapter>? = null
 
     private var progressDialog: Dialog? = null
     lateinit var respondingFacility : Facility
@@ -73,12 +81,12 @@ class ClientNotification : Fragment() {
         val mAuth = FirebaseAuth.getInstance()
 
         val facilityResponses =
-            Common.appointmentsCollectionRef.whereEqualTo("clientId",mAuth.uid).orderBy("dateResponded", Query.Direction.ASCENDING)
-        val options = FirestoreRecyclerOptions.Builder<BookService>()
-            .setQuery(facilityResponses, BookService::class.java).build()
+            Common.requestResponseNotificationCollectionRef.whereEqualTo("customerID",mAuth.uid).orderBy("notificationID", Query.Direction.DESCENDING)
+        val options = FirestoreRecyclerOptions.Builder<FacilityRequestResponse>()
+            .setQuery(facilityResponses, FacilityRequestResponse::class.java).build()
         try
         {
-            clientBookingResponseScreenAdapter = object : FirestoreRecyclerAdapter<BookService, ClientBookingResponseScreenAdapter>(options){
+            clientBookingResponseScreenAdapter = object : FirestoreRecyclerAdapter<FacilityRequestResponse, ClientBookingResponseScreenAdapter>(options){
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientBookingResponseScreenAdapter {
                     val itemView = LayoutInflater.from(parent.context).inflate(R.layout.client_booking_result_custom_layout, parent, false)
                     return ClientBookingResponseScreenAdapter(itemView)
@@ -87,7 +95,7 @@ class ClientNotification : Fragment() {
                 override fun onBindViewHolder(
                     holder: ClientBookingResponseScreenAdapter,
                     position: Int,
-                    model: BookService
+                    model: FacilityRequestResponse
                 ) {
 
 
@@ -96,47 +104,25 @@ class ClientNotification : Fragment() {
 //                        clientBaseFragment!!.view?.findViewById<TabLayout>(R.id.client_base_tab_title)
 
 
-                    Log.d("EQUA", "onBindViewHolder: ${model.clientId}")
+                    Log.d("EQUA", "onBindViewHolder: ${model.customerID}")
                     var responseState: String = ""
-//                    when(model.status){
-//                        "pending" ->{
-//                            holder.clientBookingResponseStatusIndicator.setCardBackgroundColor(Color.YELLOW)
-//                            responseState = "pending"
-//                        }
-//                        "accepted" ->{
-//                            holder.clientBookingResponseStatusIndicator.setCardBackgroundColor(Color.GREEN)
-//                            responseState = "accepted"
-//
-//                        }
-//                        "rejected" ->{
-//                            holder.clientBookingResponseStatusIndicator.setCardBackgroundColor(Color.RED)
-//                            responseState = "rejected"
-//
-//                        }
-//                    }
-//                    holder.dateCreated.text = getDate(model.dateBooked.toLong(), "dd MMMM, yyyy")
-//                    holder.timeCreated.text = getDate(model.dateBooked.toLong(), "HH:mm a")
-                    holder.responseDescription.text = "Dear Customer,\n\nYour request is $responseState."
-
-                    getFacilityDetails(model.facilityId, holder.facilityName, holder.facilityEmail, holder.facilityPhone )
+                    holder.dateCreated.text = model.dateCreated
+                    holder.timeCreated.text = model.timeCreated
+                    holder.facilityName.text = getOrganisation(model.organisationID)!!.organisationName
+                    holder.serviceName.text = getService(model.organisationProfileServiceID)!!.organisationOfferedServiceName
 
                     holder.clientBookingResponseViewDetailsButton.setOnClickListener {
-                        if(responseState == "accepted")
-                            launchDetailDialog(model)
+                        if(model.requestFormStatus == ACCEPTED_TEXT) {
+                            val notificationDetailSheetFragment =
+                                ClientNotificationDetailBottomSheet.newInstance(model)
+                            notificationDetailSheetFragment.show(
+                                childFragmentManager,
+                                "requestDetailsSheetTag"
+                            )
+                        }
+                        //launchDetailDialog(model)
                         else
-                            requireView().snackBar("Your request is still pending")
-                    }
-
-                    holder.clientBookingResponseRateServiceButton.setOnClickListener {
-//                        val ratingsTab = clientTabLayout?.getTabAt(4)
-//                        ratingsTab?.let {
-//                            val fragment = clientBaseFragment as Fragment // Replace with your own fragment class
-//                            val args = Bundle()
-//                            args.putString("serviceId", model.selectedAppointmentServiceID)
-//                            fragment.arguments = args
-//                        }
-//                        Common.serviceToRate = model.selectedAppointmentServiceID
-//                        clientTabLayout?.getTabAt(4)?.select()
+                            requireView().snackBar("Your request was not accepted")
                     }
 
                 }
@@ -150,39 +136,90 @@ class ClientNotification : Fragment() {
         binding.rvClientBookingResult.adapter = clientBookingResponseScreenAdapter
     }
 
-    private fun launchDetailDialog(model: BookService) {
+//    private fun launchDetailDialog(model: FacilityRequestResponse) {
+//
+//        val builder = layoutInflater.inflate(R.layout.client_notification_detail_dialog_layout, null)
+//
+//        getServiceDetails(model.organisationID, model.organisationProfileServiceID)
+//
+//        val tvDateCreated = builder.findViewById<TextView>(R.id.txt_client_booking_response_detail_date_created)
+//        val tvDateTimeCreated = builder.findViewById<TextView>(R.id.txt_client_booking_response_detail_time_created)
+//        val tvDetailText = builder.findViewById<TextView>(R.id.txt_client_booking_result_detail_description)
+//
+//        val btnOkay = builder.findViewById<Button>(R.id.btn_client_booking_response_detail_okay)
+//
+////        tvDateCreated.text = getDate(model.dateResponded.toLong(), "dd MMMM, yyyy")
+////        tvDateTimeCreated.text = getDate(model.dateResponded.toLong(), "hh:mm a")
+////        tvDetailText.text = "Dear Customer,\n\nThis is to confirm that your request has been accepted for service: ${scheduledService.specificServiceName}\n\nPlease come for the initial meeting at:\n\nDate: ${model.scheduledDate}\nTime: ${model.scheduledTime}\n\nWe will be happy to see you there"
+//
+//        val dialog = AlertDialog.Builder(requireContext())
+//            .setView(builder)
+//            .setCancelable(false)
+//            .create()
+//
+//
+//        btnOkay.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
+//
+//
+//        dialog.show()
+//
+//
+//
+//    }
+//
 
-        val builder = layoutInflater.inflate(R.layout.client_notification_detail_dialog_layout, null)
-
-        getServiceDetails(model.facilityId, model.selectedAppointmentServiceID)
-
-        val tvDateCreated = builder.findViewById<TextView>(R.id.txt_client_booking_response_detail_date_created)
-        val tvDateTimeCreated = builder.findViewById<TextView>(R.id.txt_client_booking_response_detail_time_created)
-        val tvDetailText = builder.findViewById<TextView>(R.id.txt_client_booking_result_detail_description)
-
-        val btnOkay = builder.findViewById<Button>(R.id.btn_client_booking_response_detail_okay)
-
-//        tvDateCreated.text = getDate(model.dateResponded.toLong(), "dd MMMM, yyyy")
-//        tvDateTimeCreated.text = getDate(model.dateResponded.toLong(), "hh:mm a")
-//        tvDetailText.text = "Dear Customer,\n\nThis is to confirm that your request has been accepted for service: ${scheduledService.specificServiceName}\n\nPlease come for the initial meeting at:\n\nDate: ${model.scheduledDate}\nTime: ${model.scheduledTime}\n\nWe will be happy to see you there"
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(builder)
-            .setCancelable(false)
-            .create()
-
-
-        btnOkay.setOnClickListener {
-            dialog.dismiss()
+    private fun getOrganisation(organisationId: String): Facility? {
+        requireContext().showProgress()
+        val deferred = CoroutineScope(Dispatchers.IO).async {
+            try {
+                val snapshot = Common.facilityCollectionRef.document(organisationId).get().await()
+                if (snapshot.exists()) {
+                    return@async snapshot.toObject(Facility::class.java)
+                } else {
+                    return@async null
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    requireContext().toast(e.message.toString())
+                }
+                return@async null
+            }
         }
 
+        val organisation = runBlocking { deferred.await() }
+        hideProgress()
+        //Log.d(TAG, "getOrganisation: $organisation")
 
-
-        dialog.show()
-
-
-
+        return organisation
     }
+
+    private fun getService(serviceId: String): Service? {
+        requireContext().showProgress()
+        val deferred = CoroutineScope(Dispatchers.IO).async {
+            try {
+                val snapshot = Common.servicesCollectionRef.document(serviceId).get().await()
+                if (snapshot.exists()) {
+                    return@async snapshot.toObject(Service::class.java)
+                } else {
+                    return@async null
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    requireContext().toast(e.message.toString())
+                }
+                return@async null
+            }
+        }
+
+        val service = runBlocking { deferred.await() }
+        hideProgress()
+
+        return service
+    }
+
 
     private fun getServiceDetails(facilityId: String, serviceId: String) = CoroutineScope(Dispatchers.IO).launch {
         Common.servicesCollectionRef
@@ -191,7 +228,7 @@ class ClientNotification : Fragment() {
 
                 for (document in querySnapshot.documents) {
                     val item = document.toObject(Service::class.java)
-                    if (item?.serviceId == serviceId) {
+                    if (item?.organisationProfileServiceID == serviceId) {
                         scheduledService = item
                     }
                 }

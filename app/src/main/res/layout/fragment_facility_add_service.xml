@@ -141,24 +141,42 @@
                         android:labelFor="@id/facility_add_service_discounted_price" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_facility_add_service_frequency"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/facility_add_service_frequency"
-                    android:textColorHint="@color/custom_facility_accent_color">
+                    android:text="@string/facility_add_service_frequency"
+                    android:textStyle="bold"
+                    android:padding="@dimen/padding_mini"/>
 
-                    <AutoCompleteTextView
-                        android:id="@+id/facility_add_service_frequency"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/facility_add_service_frequency"
-                        android:inputType="none"
-                        android:labelFor="@id/facility_add_service_frequency"
-                        android:padding="@dimen/padding_mini" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facility_add_service_frequency_1"
+                    android:id="@+id/facility_add_service_frequency_cb_1"/>
 
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facility_add_service_frequency_2"
+                    android:id="@+id/facility_add_service_frequency_cb_2"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facility_add_service_frequency_3"
+                    android:id="@+id/facility_add_service_frequency_cb_3"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facility_add_service_frequency_4"
+                    android:id="@+id/facility_add_service_frequency_cb_4"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facility_add_service_frequency_5"
+                    android:id="@+id/facility_add_service_frequency_cb_5"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_facility_add_service_available_places"
@@ -188,9 +206,11 @@
         android:layout_width="@dimen/button_width_xxl"
         android:layout_height="wrap_content"
         android:layout_above="@id/facility_add_service_next_service_button"
-        android:layout_margin="@dimen/padding_mini"
-        app:cornerRadius="@dimen/margin_mini"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/padding_mini"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_mini"
+        android:layout_marginBottom="@dimen/padding_mini"
         android:backgroundTint="@color/custom_facility_accent_color"
         android:padding="@dimen/padding_mini"
         android:text="@string/facility_add_service_submit_button" />
@@ -202,7 +222,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/padding_mini"
-        app:cornerRadius="@dimen/margin_mini"
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/custom_facility_accent_color"
         android:padding="@dimen/padding_mini"

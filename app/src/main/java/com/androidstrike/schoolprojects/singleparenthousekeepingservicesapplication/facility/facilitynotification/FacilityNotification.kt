@@ -2,6 +2,8 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +21,8 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Facility
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Service
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.getDate
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.hideProgress
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgressDialog
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -27,10 +30,14 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 class FacilityNotification : Fragment() {
 
@@ -44,13 +51,15 @@ class FacilityNotification : Fragment() {
     lateinit var servingFacility: Facility
     lateinit var scheduledService: Service
 
+    private val TAG = "FacilityNotification"
+
 
     private var progressDialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentFacilityNotificationBinding.inflate(inflater, container, false)
         return binding.root
@@ -83,8 +92,9 @@ class FacilityNotification : Fragment() {
         val mAuth = FirebaseAuth.getInstance()
 
         val facilityScheduledMeetings =
-            Common.appointmentsCollectionRef.whereEqualTo("facilityId", mAuth.uid)
-                .whereEqualTo("scheduled", true)
+            Common.appointmentsCollectionRef.whereEqualTo("organisationID", mAuth.uid)
+                .whereEqualTo("requestStatus", "pending")
+                .orderBy("requestFormId", Query.Direction.DESCENDING)
         val options = FirestoreRecyclerOptions.Builder<BookService>()
             .setQuery(facilityScheduledMeetings, BookService::class.java).build()
         try {
@@ -105,30 +115,28 @@ class FacilityNotification : Fragment() {
                     model: BookService
                 ) {
 
+                    Log.d(TAG, "onBindViewHolder: $model")
+
 
 //                    val facilityBaseFragment = parentFragment
 //                    val facilityTabLayout =
 //                        facilityBaseFragment!!.view?.findViewById<TabLayout>(R.id.facility_base_tab_title)
 
-                    getClientDetails(model.clientId, holder.clientName)
-                    getFacilityDetails(model.facilityId)
+                    getFacilityDetails(model.organisationID)
 
 
-                    getServiceDetails(model.facilityId, model.selectedAppointmentServiceID)
-                    holder.clientName.text = "${requestingClient.userFirstName} ${requestingClient.userLastName}"
-                    holder.serviceName.text = model.selectedAppointmentServiceName
-                    holder.dateCreated.text = getDate(model.dateCreated.toLong(), "EE, dd MMMM, yyyy")
+                    getServiceDetails(model.organisationID, model.organisationProfileServiceID)
+                    holder.serviceName.text = getService(model.organisationProfileServiceID)!!.organisationOfferedServiceName
+                    holder.dateCreated.text = model.dateCreated
                     holder.timeCreated.text = model.timeCreated
-                    if (model.invoiceGenerated)
-                        holder.invoiceStatus.text = resources.getText(R.string.txt_invoice_status_generated)
-                    else
-                        holder.invoiceStatus.text = resources.getText(R.string.txt_invoice_status_not_generated)
 
-                    holder.itemView.setOnClickListener {
-
-                        launchInvoiceDialog(model)
+                    holder.viewRequestButton.setOnClickListener {
+                        //launch bottom sheet
+                        val requestDetailsSheetFragment = FacilityCustomerRequestDetailBottomSheet.newInstance(model)
+                        requestDetailsSheetFragment.show(childFragmentManager, "requestDetailsSheetTag")
+                        //launchInvoiceDialog(model)
                         //requireContext().toast("${model.scheduledTime} clicked!")
-                        Log.d("EQUA", "onBindViewHolder: ${requestingClient.userFirstName} ${requestingClient.userLastName}")
+                        Log.d("EQUA", "onBindViewHolder: ${requestingClient.customerFirstName} ${requestingClient.customerLastName}")
                     }
 
                 }
@@ -153,7 +161,7 @@ class FacilityNotification : Fragment() {
                         requestingClient = item
                     }
                 }
-                clientName.text = "${requestingClient.userFirstName}, ${requestingClient.userLastName}"
+                clientName.text = "${requestingClient.customerFirstName}, ${requestingClient.customerLastName}"
             }
     }
     private fun getFacilityDetails(
@@ -182,67 +190,67 @@ class FacilityNotification : Fragment() {
 
                 for (document in querySnapshot.documents) {
                     val item = document.toObject(Service::class.java)
-                    if (item?.serviceId == serviceId) {
+                    if (item?.organisationProfileServiceID == serviceId) {
                         scheduledService = item
                     }
                 }
             }
     }
 
-    private fun launchInvoiceDialog(model: BookService) {
-
-        val builder = layoutInflater.inflate(R.layout.facility_custom_generate_invoice_layout, null)
-
-        val tvFacilityName = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_name)
-        val tvFacilityAddress = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_address)
-        val tvFacilityPhone = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_phone_number)
-        val tvFacilityEmail = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_email)
-        val tvClientName = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_name)
-        val tvClientPhone = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_phone)
-        val tvClientEmail = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_email)
-        val tvServiceName = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_category_name)
-        val tvServicePrice = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_price)
-        val tvServiceDiscountedPrice = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_discounted_price)
-        val tvServiceTotal = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_total_price)
-
-        val btnConfirmInvoice = builder.findViewById<Button>(R.id.facility_generated_invoice_confirm_button)
-
-
-        tvFacilityName.text = servingFacility.organisationName
-        tvFacilityAddress.text = servingFacility.organisationPhysicalAddress
-        tvFacilityPhone.text = servingFacility.organisationContactNumber
-        tvFacilityEmail.text = servingFacility.organisationEmail
-        tvClientName.text = "${requestingClient.userFirstName} ${requestingClient.userLastName}"
-        tvClientPhone.text = requestingClient.userPhoneNumber
-        tvClientEmail.text = requestingClient.userEmail
-        tvServiceName.setText("${model.selectedAppointmentServiceID} (service ID)")
-//        tvServicePrice.setText("$${scheduledService.servicePrice} (service price)")
-//        tvServiceDiscountedPrice.setText("${scheduledService.serviceDiscountedPrice}% (service discount)")
-
-//        val servicePrice = scheduledService.servicePrice
-//        val serviceDiscountedPrice = scheduledService.serviceDiscountedPrice
-//        tvServiceTotal.text = "Total: $${servicePrice.toDouble() - (servicePrice.toDouble() * (serviceDiscountedPrice.toDouble()/100))}"
-
-        btnConfirmInvoice.setOnClickListener {
-            requireContext().toast("Confirmed")
-        }
-
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(builder)
-            .setCancelable(false)
-            .create()
-
-        dialog.show()
-
-
-
-        btnConfirmInvoice.setOnClickListener {
-            launchInvoiceRecordDialog(model, dialog)
-        }
-
-
-    }
+//    private fun launchInvoiceDialog(model: BookService) {
+//
+//        val builder = layoutInflater.inflate(R.layout.facility_custom_generate_invoice_layout, null)
+//
+//        val tvFacilityName = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_name)
+//        val tvFacilityAddress = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_address)
+//        val tvFacilityPhone = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_phone_number)
+//        val tvFacilityEmail = builder.findViewById<TextView>(R.id.facility_generated_invoice_facility_email)
+//        val tvClientName = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_name)
+//        val tvClientPhone = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_phone)
+//        val tvClientEmail = builder.findViewById<TextView>(R.id.facility_generated_invoice_customer_email)
+//        val tvServiceName = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_category_name)
+//        val tvServicePrice = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_price)
+//        val tvServiceDiscountedPrice = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_discounted_price)
+//        val tvServiceTotal = builder.findViewById<TextView>(R.id.facility_generated_invoice_request_service_total_price)
+//
+//        val btnConfirmInvoice = builder.findViewById<Button>(R.id.facility_generated_invoice_confirm_button)
+//
+//
+//        tvFacilityName.text = servingFacility.organisationName
+//        tvFacilityAddress.text = servingFacility.organisationPhysicalAddress
+//        tvFacilityPhone.text = servingFacility.organisationContactNumber
+//        tvFacilityEmail.text = servingFacility.organisationEmail
+//        tvClientName.text = "${requestingClient.customerFirstName} ${requestingClient.customerLastName}"
+//        tvClientPhone.text = requestingClient.customerMobileNumber
+//        tvClientEmail.text = requestingClient.customerEmail
+//        tvServiceName.setText("${model.organisationProfileServiceID} (service ID)")
+////        tvServicePrice.setText("$${scheduledService.servicePrice} (service price)")
+////        tvServiceDiscountedPrice.setText("${scheduledService.serviceDiscountedPrice}% (service discount)")
+//
+////        val servicePrice = scheduledService.servicePrice
+////        val serviceDiscountedPrice = scheduledService.serviceDiscountedPrice
+////        tvServiceTotal.text = "Total: $${servicePrice.toDouble() - (servicePrice.toDouble() * (serviceDiscountedPrice.toDouble()/100))}"
+//
+//        btnConfirmInvoice.setOnClickListener {
+//            requireContext().toast("Confirmed")
+//        }
+//
+//
+//        val dialog = AlertDialog.Builder(requireContext())
+//            .setView(builder)
+//            .setCancelable(false)
+//            .create()
+//
+//        dialog.show()
+//
+//
+//
+//        btnConfirmInvoice.setOnClickListener {
+//            launchInvoiceRecordDialog(model, dialog)
+//        }
+//
+//
+//    }
 
     private fun launchInvoiceRecordDialog(model: BookService, generateInvoiceDialog: AlertDialog) {
 
@@ -326,13 +334,29 @@ class FacilityNotification : Fragment() {
 
     }
 
-    private fun showProgress() {
-        hideProgress()
-        progressDialog = requireActivity().showProgressDialog()
-    }
+    private fun getService(serviceId: String): Service? {
+        requireContext().showProgress()
+        val deferred = CoroutineScope(Dispatchers.IO).async {
+            try {
+                val snapshot = Common.servicesCollectionRef.document(serviceId).get().await()
+                if (snapshot.exists()) {
+                    return@async snapshot.toObject(Service::class.java)
+                } else {
+                    return@async null
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    requireContext().toast(e.message.toString())
+                }
+                return@async null
+            }
+        }
 
-    private fun hideProgress() {
-        progressDialog?.let { if (it.isShowing) it.cancel() }
+        val service = runBlocking { deferred.await() }
+        hideProgress()
+
+        //Log.d(TAG, "getService: ${service!!.serviceName}")
+        return service
     }
 
 

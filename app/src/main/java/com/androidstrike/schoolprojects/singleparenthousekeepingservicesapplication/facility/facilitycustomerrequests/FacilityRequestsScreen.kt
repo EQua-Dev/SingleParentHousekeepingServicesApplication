@@ -3,7 +3,6 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -116,51 +115,51 @@ class FacilityRequestsScreen : Fragment() {
 //                    val facilityTabLayout =
 //                        facilityBaseFragment!!.view?.findViewById<TabLayout>(R.id.facility_base_tab_title)
 
-                    getClientDetails(model, holder.requestDescription)
-                    when (model.requestStatus) {
-                        "pending" -> {
-                            holder.statusIndicator.setCardBackgroundColor(Color.YELLOW)
-                            holder.acceptButton.setOnClickListener {
-                                acceptRequest(model)
-                            }
-                            holder.rejectButton.setOnClickListener {
-                                rejectRequest(model)
-                            }
-                        }
-
-                        "accepted" -> {
-                            holder.statusIndicator.setCardBackgroundColor(resources.getColor(R.color.custom_client_accent_color))
-                            holder.acceptButton.apply {
-                                text =
-                                    resources.getText(R.string.facility_customer_request_generate_invoice)
-                                setOnClickListener {
-                                    //launchScheduleDialog(model, facilityTabLayout)
-
-                                }
-                            }
-                            holder.rejectButton.apply {
-                                text = resources.getText(R.string.txt_reject_customer_request)
-                                setOnClickListener {
-                                    rejectRequest(model)
-                                }
-                            }
-
-                        }
-
-                        "rejected" -> {
-                            holder.statusIndicator.setCardBackgroundColor(resources.getColor(R.color.custom_facility_accent_color))
-                            holder.rejectButton.apply {
-                                text =
-                                    resources.getText(R.string.facility_customer_request_rejected)
-                                enable(false)
-                            }
-                            holder.acceptButton.setOnClickListener {
-                                acceptRequest(model)
-
-                            }
-
-                        }
-                    }
+//                    getClientDetails(model, holder.requestDescription)
+//                    when (model.requestStatus) {
+//                        "pending" -> {
+//                            holder.statusIndicator.setCardBackgroundColor(Color.YELLOW)
+//                            holder.acceptButton.setOnClickListener {
+//                                acceptRequest(model)
+//                            }
+//                            holder.rejectButton.setOnClickListener {
+//                                rejectRequest(model)
+//                            }
+//                        }
+//
+//                        "accepted" -> {
+//                            holder.statusIndicator.setCardBackgroundColor(resources.getColor(R.color.custom_client_accent_color))
+//                            holder.acceptButton.apply {
+//                                text =
+//                                    resources.getText(R.string.facility_customer_request_generate_invoice)
+//                                setOnClickListener {
+//                                    //launchScheduleDialog(model, facilityTabLayout)
+//
+//                                }
+//                            }
+//                            holder.rejectButton.apply {
+//                                text = resources.getText(R.string.txt_reject_customer_request)
+//                                setOnClickListener {
+//                                    rejectRequest(model)
+//                                }
+//                            }
+//
+//                        }
+//
+//                        "rejected" -> {
+//                            holder.statusIndicator.setCardBackgroundColor(resources.getColor(R.color.custom_facility_accent_color))
+//                            holder.rejectButton.apply {
+//                                text =
+//                                    resources.getText(R.string.facility_customer_request_rejected)
+//                                enable(false)
+//                            }
+//                            holder.acceptButton.setOnClickListener {
+//                                acceptRequest(model)
+//
+//                            }
+//
+//                        }
+//                    }
                     holder.dateCreated.text = getDate(model.dateCreated.toLong(), "dd MMMM, yyyy")
                     holder.timeCreated.text = getDate(model.timeCreated.toLong(), "HH:mm a")
                     //holder.requestDescription.text =
@@ -233,7 +232,7 @@ class FacilityRequestsScreen : Fragment() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         val documentRef = Common.appointmentsCollectionRef.document(model.requestFormId)
 
-        val scheduleMessage = "Dear Customer,\n\nThis is to confirm that your request has been accepted for the service ${model.selectedAppointmentServiceID}. Please come for the initial meeting at $confirmedMeetingTime on $confirmedMeetingDate.\n\nWe will be happy to see you then"
+        val scheduleMessage = "Dear Customer,\n\nThis is to confirm that your request has been accepted for the service ${model.organisationProfileServiceID}. Please come for the initial meeting at $confirmedMeetingTime on $confirmedMeetingDate.\n\nWe will be happy to see you then"
 
         val schedules = hashMapOf<String, Any>(
             "scheduled" to true,
@@ -309,11 +308,11 @@ class FacilityRequestsScreen : Fragment() {
 
                 for (document in querySnapshot.documents) {
                     val item = document.toObject(Client::class.java)
-                    if (item?.userId == model.clientId) {
+                    if (item?.userId == model.customerID) {
                         requestingClient = item
                     }
                 }
-                requestDescription.text = "Dear Sirs,\nMy name is ${requestingClient.userFirstName} ${requestingClient.userLastName}.\n\nI require your service ${model.selectedAppointmentServiceName}, starting from ${model.selectedAppointmentDate} if possible. My contact email is ${requestingClient.userEmail}.\n\nPlease, let me know if you can accomodate my request."
+                requestDescription.text = "Dear Sirs,\nMy name is ${requestingClient.customerFirstName} ${requestingClient.customerLastName}.\n\nI require your service ${model.typeOfServiceID}, starting from ${model.requestedStartDate} if possible. My contact email is ${requestingClient.customerEmail}.\n\nPlease, let me know if you can accomodate my request."
             }
     }
 

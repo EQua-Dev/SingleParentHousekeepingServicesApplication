@@ -13,7 +13,6 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,14 +22,11 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.hideProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgressDialog
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.hbb20.CountryCodePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -304,11 +300,11 @@ class ClientSignUp : Fragment() {
     ): Client {
         return Client(
             userId = newUserId,
-            userFirstName = userFirstName,
-            userLastName = userLastName,
-            userEmail = userEmail,
+            customerFirstName = userFirstName,
+            customerLastName = userLastName,
+            customerEmail = userEmail,
             dateJoined = dateJoined,
-            userPhoneNumber = userPhoneNumber
+            customerMobileNumber = userPhoneNumber
         )
     }
 

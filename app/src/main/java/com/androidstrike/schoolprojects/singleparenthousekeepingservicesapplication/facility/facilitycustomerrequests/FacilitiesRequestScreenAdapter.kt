@@ -11,18 +11,13 @@ class FacilitiesRequestScreenAdapter(itemView: View): RecyclerView.ViewHolder(it
 
     var dateCreated: TextView
     var timeCreated: TextView
-    var requestDescription: TextView
-    var acceptButton: Button
-    var rejectButton: Button
-    var statusIndicator: MaterialCardView
+    var serviceName: TextView
+    var viewRequestButton: Button
 
     init {
-        dateCreated = itemView.findViewById(R.id.txt_date_created)
-        timeCreated = itemView.findViewById(R.id.txt_time_created)
-        requestDescription = itemView.findViewById(R.id.txt_service_description)
-        rejectButton = itemView.findViewById(R.id.btn_reject_customer_request)
-        acceptButton = itemView.findViewById(R.id.btn_accept_customer_request)
-        statusIndicator = itemView.findViewById(R.id.status_indicator)
-
+        dateCreated = itemView.findViewById(R.id.txt_facility_invoice_date_created)
+        timeCreated = itemView.findViewById(R.id.txt_facility_invoice_time_created)
+        serviceName = itemView.findViewById(R.id.txt_facility_invoice_service_type)
+        viewRequestButton = itemView.findViewById(R.id.btn_view_customer_request)
     }
 }

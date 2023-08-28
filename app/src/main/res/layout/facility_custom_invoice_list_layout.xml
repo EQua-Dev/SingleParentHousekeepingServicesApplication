@@ -31,29 +31,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@tools:sample/full_names"
-            android:id="@+id/txt_facility_invoice_client_name"
-            android:layout_below="@id/txt_facility_invoice_date_created"
-            android:padding="@dimen/padding_mini"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="generated"
-            android:textStyle="italic"
-            android:id="@+id/txt_facility_invoice_generated_status"
-            android:layout_below="@id/txt_facility_invoice_date_created"
-            android:layout_alignParentEnd="true"
-            android:padding="@dimen/padding_mini"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             tools:text="Palliative Rehabilitation"
-            android:layout_below="@id/txt_facility_invoice_client_name"
+            android:layout_below="@id/txt_facility_invoice_date_created"
             android:id="@+id/txt_facility_invoice_service_type"
             android:padding="@dimen/padding_mini"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="@dimen/button_width_xxl"
+            android:layout_height="wrap_content"
+            android:text="@string/view_customer_request"
+            android:layout_below="@+id/txt_facility_invoice_service_type"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/padding_mini"
+            android:id="@+id/btn_view_customer_request"/>
 
     </RelativeLayout>
 

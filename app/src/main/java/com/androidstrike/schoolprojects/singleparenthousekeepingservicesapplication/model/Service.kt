@@ -1,16 +1,15 @@
 package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model
 
 data class Service(
-    val serviceId: String = "",
-    val serviceName: String = "",
-    val serviceType: String = "",
-    val serviceOrganisationOwner: String = "",
-    val serviceDetail: String = "",
-    val servicePrice: String = "",
+    val organisationProfileServiceID: String = "",
+    val organisationID: String = "",
+    val categoryOfServiceID: String = "",
+    val typeOfServiceID: String = "",
+    val organisationOfferedServiceName: String = "",
+    val organisationOfferedServiceDetails: String = "",
+    val organisationServiceFrequency: List<String> = listOf(),
+    val organisationOfferedServicePrice: String = "",
     val serviceDiscountedPrice: String = "",
-    val serviceAvailablePlace: String = "",
-    val serviceFrequency: String = "",
-    val serviceCategoryType: String = "",
+    val serviceAvailability: String = "",
 
-
-)
+    )

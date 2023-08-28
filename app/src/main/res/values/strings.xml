@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Single Home Aid</string>
+    <string name="app_name">Single Parent Domestic Help </string>
     <string name="single_parent_role">Single Parent</string>
     <string name="house_keeping_facility_role">Housekeeping Service Organisation</string>
 
@@ -49,6 +49,7 @@
     <string name="landing_button_facility_role">Rehabilitation Facility</string>
     <string name="sign_up_address">Enter Your Address</string>
     <string name="my_address">Here</string>
+
     <string name="book_rehab">Place Request for Chosen Service</string>
     <string name="book_appointment_title">Place Request for Service</string>
     <string name="book_appointment_service">Select Service</string>
@@ -56,6 +57,7 @@
     <string name="book_appointment_time">Select Appointment Time</string>
     <string name="book_appointment_description">Request Text</string>
     <string name="confirm_appointment_book">Confirm Book</string>
+
     <string name="facility_navigation_profile">Profile</string>
     <string name="facility_navigation_customer_requests">Customer Requests</string>
     <string name="facility_navigation_feedback"><![CDATA[Ratings & Feedback]]></string>
@@ -63,6 +65,7 @@
     <string name="user_request_title">User Request</string>
     <string name="btn_accept_customer_request">Accept</string>
     <string name="btn_reject_customer_request">Reject</string>
+
     <string name="profile_title">Facility Profile</string>
     <string name="profile_name">Facility Name</string>
     <string name="profile_email">Facility Email</string>
@@ -75,6 +78,7 @@
     <string name="invoice_placeholder">View Invoices / Provide Payment</string>
     <string name="wallet_title">Create and Fund Digital Wallet for Customer</string>
     <string name="notification_placeholder">View Notification</string>
+
     <string name="facility_add_service_title">Add Service to Facility Profile</string>
     <string name="facility_add_service_category">Select Category of Provided Service</string>
     <string name="facility_add_service_description">Service Name</string>
@@ -83,8 +87,14 @@
     <string name="add_service_available_places">Service Available Places</string>
     <string name="facility_add_service_start_end_date">Start-End Date (if applicable)</string>
     <string name="facility_add_service_schedule">Service Schedule (if applicable)</string>
+    <string name="facility_add_service_frequency_1">Once Off</string>
+    <string name="facility_add_service_frequency_2">Daily (Mon - Sat)</string>
+    <string name="facility_add_service_frequency_3">Once a Week</string>
+    <string name="facility_add_service_frequency_4">Bi-weekly</string>
+    <string name="facility_add_service_frequency_5">Monthly</string>
     <string name="facility_add_service_submit_button">Submit</string>
     <string name="facility_add_service_next_service_button">Next Service</string>
+
     <string name="facility_customer_request_generate_invoice">Generate Invoice</string>
     <string name="facility_customer_request_rejected">rejected</string>
     <string name="txt_reject_customer_request">Reject Request</string>
@@ -96,6 +106,7 @@
     <string name="facility_generated_invoice_facility_details_title">Facility Details</string>
     <string name="facility_generated_invoice_request_details_title">Request Details</string>
     <string name="facility_generated_invoice_confirm_button">Create Invoice</string>
+
     <string name="facility_new_record_title">Invoice Bank Record</string>
     <string name="facility_new_record_bank_name">Bank Name</string>
     <string name="facility_new_record_account_iban">Account IBAN</string>
@@ -106,6 +117,7 @@
     <string name="txt_invoice_payment_status_paid">paid</string>
     <string name="txt_invoice_payment_status_not_paid">not paid</string>
     <string name="client_generated_invoice_payment_button">Provide Payment</string>
+
     <string name="menu_logout">Logout</string>
     <string name="facility_submit_update_profile">Submit</string>
     <string name="facility_update_profile_title">Update Profile</string>
@@ -130,6 +142,32 @@
     <string name="ignore">Ignore Text</string>
     <string name="cannot_get_address_auto">Address not found. Enter address manually.</string>
     <string name="invalid_phone_number">A Valid Irish Number should start with 083, 085, 086, 087, 089 and be in total length of 10 digits.</string>
+
+    <string name="requesting_client_name">Customer name: %s %s</string>
+    <string name="requesting_client_contact_number">Customer contact number: %s</string>
+    <string name="requesting_client_email">Customer email address: %s</string>
+    <string name="requesting_chosen_service_name">Chosen service name: %s</string>
+    <string name="requesting_chosen_service_type">Chosen service type: %s</string>
+    <string name="requesting_start_date">Selected start date: %s</string>
+    <string name="requesting_service_price">Requested service price: €%s</string>
+    <string name="requesting_service_discounted_price">Requested service discounted price: €%s</string>
+    <string name="requesting_date_created">Date created: %s</string>
+    <string name="requesting_time_created">Time created: %s</string>
+    <string name="notification_text">Dear %s,\n\nYour request for %s has been: %s\n\nDate created: %s\nTime created: %s</string>
+
+    <string name="facility_generate_request_invoice_company_name">Company name: %s</string>
+    <string name="facility_generate_request_invoice_company_physical_address">Company Physical address: %s</string>
+    <string name="facility_generate_request_invoice_company_contact_number">Contact number: %s</string>
+    <string name="facility_generate_request_invoice_company_email">Company email address: %s</string>
+    <string name="facility_generate_request_invoice_customer_name">Customer name: %s %s</string>
+    <string name="facility_generate_request_invoice_customer_contact_number">Customer contact number: %s</string>
+    <string name="facility_generate_request_invoice_customer_email_address">Customer email address: %s</string>
+    <string name="facility_generate_request_invoice_service_name">Service name: %s</string>
+    <string name="facility_generate_request_invoice_service_price">Service price: €%s</string>
+    <string name="facility_generate_request_invoice_service_discounted_price">Service discounted price: €%s</string>
+    <string name="facility_generate_request_invoice_service_total_price">Request Total: €%s</string>
+    <string name="invoice_text">Dear %s,\n\nYour request for %s has been %s.\nPlease, provide required payment for the requested service to Bank name (%s), Account IBAN (%s), Account holder name (%s) in order to avail the service.\n\nDate created: %s\nTime created: %s</string>
+
 
     <string name="service_type">Service Type: %s</string>
     <string name="service_specialist_name">Service Specialist Name: %s</string>
@@ -157,6 +195,17 @@
     <string name="facility_add_service_frequency">Select Service Frequency</string>
     <string name="book_appointment_service_category">Select Service Category</string>
     <string name="book_appointment_service_type">Select Service Type</string>
+    <string name="facility_notifications_title">View List of Customer Requests</string>
+    <string name="view_customer_request">View Request</string>
+    <string name="book_appointment_service_frequency">Select Service Frequency</string>
+    <string name="requesting_chosen_service_frequency">Frequencyof offered service: %s</string>
+    <string name="requesting_chosen_service_category">Chosen request category: %s</string>
+    <string name="facility_new_record_cancel_btn">Cancel Invoice Generation</string>
+    <string name="client_view_notification_title">View Notifications</string>
+
+    <string name="txt_client_booking_response_detail_time_created">Notification time: %s</string>
+    <string name="txt_client_booking_response_detail_date_created">Notification date: %s</string>
+
 
     <string-array name="service_available_places_option">
         <item>Yes</item>

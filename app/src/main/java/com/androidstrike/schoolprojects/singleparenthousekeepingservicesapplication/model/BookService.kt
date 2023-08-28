@@ -1,41 +1,21 @@
 package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class BookService(
     val requestFormId: String = "",
-    val clientId: String = "",
-    val facilityId: String = "",
-    val selectedAppointmentServiceID: String = "",
-    val selectedAppointmentServiceName: String = "",
-    val selectedAppointmentServiceType: String = "",
-//    val selectedAppointmentSpecialistID: String = "",
-//    val selectedAppointmentSpecificServiceName: String = "",
-    val selectedAppointmentServicePrice: String = "",
-    val selectedAppointmentServiceDiscountedPrice: String = "",
-    val selectedAppointmentServiceAvailablePlaces: String = "",
-    var selectedAppointmentDate: String = "",
-    var selectedAppointmentRequestText: String = "",
+    val customerID: String = "",
+    val organisationID: String = "",
+    val organisationProfileServiceID: String = "",
+    val typeOfServiceID: String = "",
+    val categoryOfServiceID: String = "",
+    val requestedServiceFrequency: String = "",
+    val requestDeliveryOfGoodsOptions: String = "",
+    var requestedStartDate: String = "",
+    var requestFormText: String = "",
     var dateCreated: String = "",
     var timeCreated: String = "",
-    val requestStatus: String = "pending",
-    val invoiceGenerated: Boolean = false
-//    val selectedAppointmentServiceName: String = "",
-//    val selectedAppointmentServiceID: String = "",
-//    val selectedAppointmentDate: String = "",
-//    val selectedAppointmentTime: String = "",
-//    val selectedAppointmentDescription: String = "",
-//    val dateBooked: String = "",
-//    val clientId: String = "",
-//    val facilityId: String = "",
-//    val status: String = "",
-//    val dateResponded: String = "",
-//    val scheduled: Boolean = false,
-//    val scheduledDate: String = "",
-//    val scheduledTime: String = "",
-//    val dateScheduled: String = "",
-//    val invoiceBankName: String = "",
-//    val invoiceAccountIBAN: String = "",
-//    val invoiceAccountName: String = "",
-//    val invoiceGeneratedTime: Long = 0,
-//    val invoiceGenerated: Boolean = false,
-//    val invoicePaid: Boolean = false
-    )
+    var requestStatus: String = "",
+): Parcelable

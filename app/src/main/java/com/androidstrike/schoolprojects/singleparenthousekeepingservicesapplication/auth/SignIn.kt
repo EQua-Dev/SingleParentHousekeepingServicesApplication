@@ -82,6 +82,7 @@ class SignIn : Fragment() {
         }
 
         binding.accountLogInBtnLogin.setOnClickListener {
+            binding.textInputLayoutSignInEmail.error = null
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding.textInputLayoutSignInEmail.error =
                     "Enter valid email" // Display an error message
@@ -119,7 +120,7 @@ class SignIn : Fragment() {
                                         clientRef.get()
                                             .addOnSuccessListener { documentSnapshot ->
                                                 if (documentSnapshot.exists()) {
-                                                    clientName = documentSnapshot.getString("userFirstName")!!
+                                                    clientName = documentSnapshot.getString("customerFirstName")!!
                                                     // Use the value here
                                                 }
                                             }

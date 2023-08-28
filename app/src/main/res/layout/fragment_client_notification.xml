@@ -6,6 +6,15 @@
     tools:context=".client.clientnotification.ClientNotification">
 
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/client_view_notification_title"
+        android:padding="@dimen/padding_mini"
+        android:text="@string/client_view_notification_title" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
