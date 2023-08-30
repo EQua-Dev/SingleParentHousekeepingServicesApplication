@@ -53,24 +53,41 @@ class DigitalWallet : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.createDigitalWallet.setOnClickListener {
-            val newWallet = WalletData(
-                walletId = hashString(
-                    "${auth.uid}${
-                        System.currentTimeMillis()
-                    }"
-                ),
-                walletOwner = auth.uid!!,
-                walletBalance = "0.0"
-            )
-            //create wallet
-            createWallet(newWallet)
+
+        loadWalletInfo()
+
+
+    }
+
+    private fun loadWalletInfo() {
+        //checkWalletAvailability()
+        binding.createDigitalWallet.apply {
+            visible(getUser(auth.uid!!)!!.wallet.isEmpty())
+            setOnClickListener {
+
+                val newWallet = WalletData(
+                    walletId = hashString(
+                        "${auth.uid}${
+                            System.currentTimeMillis()
+                        }"
+                    ),
+                    walletOwner = auth.uid!!,
+                    walletBalance = "0.0"
+                )
+                //create wallet
+                createWallet(newWallet)
+            }
         }
-        binding.fundDigitalWallet.setOnClickListener {
-            launchFundWalletDialog()
+
+        binding.fundDigitalWallet.apply {
+            visible(getUser(auth.uid!!)!!.wallet.isNotEmpty())
+            setOnClickListener {
+                launchFundWalletDialog()
 //            val bottomSheetFragment = FundWalletBottomSheet.newInstance()
 //            bottomSheetFragment.show(childFragmentManager, "bottomSheetTag")
+            }
         }
+
     }
 
     private fun launchFundWalletDialog() {
@@ -118,7 +135,8 @@ class DigitalWallet : Fragment() {
                         clientCollectionRef.document(auth.uid!!)
                             .update("wallet", newWallet.walletId)
                         hideProgress()
-                        binding.createDigitalWallet.visible(false)
+                        loadWalletInfo()
+                        //binding.createDigitalWallet.visible(false)
                         //binding.walletLayout.visible(true)
                         //fetchWalletDetails(newWallet.walletId)
                     }//.await()
