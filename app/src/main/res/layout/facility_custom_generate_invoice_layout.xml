@@ -10,8 +10,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_midi">
 
         <TextView
             android:id="@+id/facility_generated_invoice_facility_details_title"
@@ -23,13 +23,11 @@
             android:textAlignment="center"
             android:textColor="@color/black" />
 
-
         <TextView
             android:id="@+id/facility_generated_invoice_facility_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/facility_generated_invoice_facility_details_title"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_company_name" />
 
@@ -38,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_facility_name"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_company_physical_address" />
 
@@ -47,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_facility_address"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_company_contact_number" />
 
@@ -56,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_facility_phone_number"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_company_email" />
 
@@ -65,10 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_facility_email"
-            android:layout_marginStart="@dimen/padding_midi"
-            android:layout_marginTop="@dimen/padding_midi"
-            android:layout_marginEnd="@dimen/padding_midi"
-            android:layout_marginBottom="@dimen/padding_midi"
+            android:layout_margin="@dimen/padding_midi"
             android:padding="@dimen/padding_mini"
             android:text="@string/facility_generated_invoice_customer_details_title"
             android:textAlignment="center"
@@ -80,7 +72,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_customer_details_title"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_customer_name" />
 
@@ -89,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_customer_name"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_customer_contact_number" />
 
@@ -98,10 +88,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_customer_phone"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:layout_marginBottom="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_customer_email_address" />
 
@@ -111,10 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_customer_email"
-            android:layout_marginStart="@dimen/padding_midi"
-            android:layout_marginTop="@dimen/padding_midi"
-            android:layout_marginEnd="@dimen/padding_midi"
-            android:layout_marginBottom="@dimen/padding_midi"
+            android:layout_margin="@dimen/padding_midi"
             android:padding="@dimen/padding_mini"
             android:text="@string/facility_generated_invoice_request_details_title"
             android:textAlignment="center"
@@ -126,16 +109,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_request_details_title"
-            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_service_name" />
+
+        <TextView
+            android:id="@+id/facility_generated_invoice_request_service_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/facility_generated_invoice_request_service_name"
+            android:padding="@dimen/padding_mini"
+            tools:text="@string/facility_generate_request_invoice_service_frequency" />
 
         <TextView
             android:id="@+id/facility_generated_invoice_request_service_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/facility_generated_invoice_request_service_name"
-            android:layout_margin="@dimen/padding_mini"
+            android:layout_below="@id/facility_generated_invoice_request_service_frequency"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_service_price" />
 
@@ -144,10 +133,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_request_service_price"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:layout_marginBottom="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             tools:text="@string/facility_generate_request_invoice_service_discounted_price" />
 
@@ -157,10 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/facility_generated_invoice_request_service_discounted_price"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:layout_marginBottom="@dimen/padding_mini"
+            android:layout_margin="@dimen/padding_mini"
             android:padding="@dimen/padding_mini"
             android:textColor="@color/black"
             android:textSize="@dimen/text_l"
@@ -175,9 +157,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/margin_midi"
             android:text="@string/facility_generated_invoice_confirm_button"
-            app:backgroundTint="@color/custom_client_accent_color"
-            />
-
+            app:backgroundTint="@color/custom_client_accent_color" />
 
     </RelativeLayout>
 

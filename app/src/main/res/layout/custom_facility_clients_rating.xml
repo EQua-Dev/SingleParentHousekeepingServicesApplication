@@ -17,34 +17,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@tools:sample/date/ddmmyy"
-            android:id="@+id/txt_client_invoice_date_generated"
+            android:id="@+id/txt_facility_rated_date"
             android:padding="@dimen/padding_mini"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@tools:sample/date/hhmm"
-            android:id="@+id/txt_client_invoice_time_generated"
+            android:id="@+id/txt_facility_rated_time"
             android:layout_alignParentEnd="true"
             android:padding="@dimen/padding_mini"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="3.5"
+                android:layout_gravity="center"
+                android:layout_alignParentEnd="true"
+                android:padding="@dimen/padding_midi"
+                android:layout_below="@id/txt_facility_rated_time"
+                android:id="@+id/txt_client_service_rating"
+                app:drawableTopCompat="@drawable/ic_star_rate" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@tools:sample/full_names"
-            android:id="@+id/txt_client_invoice_facility_name"
-            android:layout_below="@id/txt_client_invoice_date_generated"
-            android:padding="@dimen/padding_mini"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="@dimen/button_width_xxl"
-            android:layout_height="wrap_content"
-            android:text="@string/client_notification_view_btn"
-            android:textStyle="italic"
-            android:id="@+id/btn_client_view_invoice_generated"
-            android:layout_below="@id/txt_client_invoice_service_type"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="@color/custom_client_accent_color"
+            android:id="@+id/txt_facility_rated_client_name"
+            android:layout_below="@id/txt_facility_rated_date"
             android:padding="@dimen/padding_mini"/>
 
 
@@ -52,8 +53,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Palliative Rehabilitation"
-            android:layout_below="@id/txt_client_invoice_facility_name"
-            android:id="@+id/txt_client_invoice_service_type"
+            android:layout_below="@id/txt_facility_rated_client_name"
+            android:id="@+id/txt_facility_rated_service_name"
+            android:padding="@dimen/padding_mini"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@tools:sample/lorem/random"
+            tools:lines="2"
+            android:layout_below="@id/txt_facility_rated_service_name"
+            android:id="@+id/txt_facility_rated_text"
             android:padding="@dimen/padding_mini"/>
 
     </RelativeLayout>

@@ -103,7 +103,7 @@
     <string name="facility_schedule_meeting_time">Schedule Meeting Start Time</string>
     <string name="facility_confirm_meeting_schedule">Confirm Meeting Schedule</string>
     <string name="facility_generated_invoice_customer_details_title">Customer Details</string>
-    <string name="facility_generated_invoice_facility_details_title">Facility Details</string>
+    <string name="facility_generated_invoice_facility_details_title">Organisation Details</string>
     <string name="facility_generated_invoice_request_details_title">Request Details</string>
     <string name="facility_generated_invoice_confirm_button">Create Invoice</string>
 
@@ -116,7 +116,7 @@
     <string name="txt_invoice_status_generated">generated</string>
     <string name="txt_invoice_payment_status_paid">paid</string>
     <string name="txt_invoice_payment_status_not_paid">not paid</string>
-    <string name="client_generated_invoice_payment_button">Provide Payment</string>
+    <string name="client_generated_invoice_payment_button">Pay For Invoice</string>
 
     <string name="menu_logout">Logout</string>
     <string name="facility_submit_update_profile">Submit</string>
@@ -177,7 +177,7 @@
     <string name="service_discount_price">Discounted Price: €%s</string>
     <string name="available_places">Available Places: %s</string>
     <string name="service_start_date">Service Start Date</string>
-    <string name="request_text">Dear Sirs,\n\nMy name is %s, %s, %s. I require your provided service %s, starting from %s.\n\nPlease let me know if you can accommodate my request.\n\nDate Created: %s\nTime Created: %s</string>
+    <string name="request_text">Dear Sirs,\n\nMy name is %s, %s, %s. I require your provided service %s, starting from %s.\n\nPlease let me know if you can accommodate my request %s.\n\nDate Created: %s\nTime Created: %s</string>
     <string name="submit_request">Submit Request</string>
     <string name="invalid_password">A Strong Password Should be minimum of 8 characters in length, Containing upper and lower case letters, special characters and digits.</string>
     <string name="invalid_email">A Valid Email Address should contain a valid email domain (gmail.com, hotmail.com, yahoo.com, outlook.com, live.com) and has the @ sign before it</string>
@@ -198,13 +198,24 @@
     <string name="facility_notifications_title">View List of Customer Requests</string>
     <string name="view_customer_request">View Request</string>
     <string name="book_appointment_service_frequency">Select Service Frequency</string>
-    <string name="requesting_chosen_service_frequency">Frequencyof offered service: %s</string>
+    <string name="requesting_chosen_service_frequency">Frequency of offered service: %s</string>
     <string name="requesting_chosen_service_category">Chosen request category: %s</string>
     <string name="facility_new_record_cancel_btn">Cancel Invoice Generation</string>
     <string name="client_view_notification_title">View Notifications</string>
 
     <string name="txt_client_booking_response_detail_time_created">Notification time: %s</string>
     <string name="txt_client_booking_response_detail_date_created">Notification date: %s</string>
+    <string name="facility_generate_request_invoice_service_frequency">Service frequency: %s</string>
+    <string name="client_rating_title">Services To Rate</string>
+
+    <string name="client_make_payment_wallet_balance">Wallet Balance: €%s</string>
+    <string name="client_make_payment_text">The sum of €%s will be deducted from your wallet for service: %s\n\nProceed?</string>
+    <string name="insufficient_balance">Insufficient balance\n\nFund wallet to make payment</string>
+    <string name="wallet_balance_text">Wallet Balance</string>
+    <string name="wallet_add_funds_text">Fund Wallet</string>
+    <string name="wallet_history_title">Wallet Transaction History</string>
+    <string name="euro_money_text">EUR %s</string>
+    <string name="facility_rating_title">View Customer Ratings</string>
 
 
     <string-array name="service_available_places_option">

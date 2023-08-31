@@ -4,10 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".client.landing.FeedbackRating">
+    tools:context=".client.clientfeedback.FeedbackRating">
 
 
-<!--    <TextView-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:padding="@dimen/padding_mini"
+        android:id="@+id/client_ratings_list_title"
+        android:text="@string/client_rating_title" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_mini"
+        android:layout_below="@+id/client_ratings_list_title"
+        android:id="@+id/rv_client_service_ratings"
+        tools:listitem="@layout/client_custom_invoice_notification_layout"
+        tools:itemCount="7"/>
+
+
+
+
+    <!--    <TextView-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text="@string/rating_title"-->

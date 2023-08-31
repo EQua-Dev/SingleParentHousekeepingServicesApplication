@@ -1,6 +1,7 @@
 package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientinvoice
 
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
@@ -11,7 +12,7 @@ class ClientInvoiceNotificationAdapter(itemView: View): RecyclerView.ViewHolder(
     var timeCreated: TextView
     var facilityName: TextView
     var serviceName: TextView
-    var invoicePaymentStatus: TextView
+    var btnViewNotificationDetails: Button
 
 
     init {
@@ -19,7 +20,7 @@ class ClientInvoiceNotificationAdapter(itemView: View): RecyclerView.ViewHolder(
         timeCreated = itemView.findViewById(R.id.txt_client_invoice_time_generated)
         facilityName = itemView.findViewById(R.id.txt_client_invoice_facility_name)
         serviceName = itemView.findViewById(R.id.txt_client_invoice_service_type)
-        invoicePaymentStatus = itemView.findViewById(R.id.txt_client_invoice_generated_payment_status)
+        btnViewNotificationDetails = itemView.findViewById(R.id.btn_client_view_invoice_generated)
 
 
     }

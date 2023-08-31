@@ -3,6 +3,7 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletData
 import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletHistory
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
@@ -28,6 +31,8 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.visible
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +47,13 @@ class DigitalWallet : Fragment() {
     private var _binding: FragmentDigitalWalletBinding? = null
     private val binding get() = _binding!!
 
+
+    private var walletHistoryAdapter: FirestoreRecyclerAdapter<WalletHistory, WalletHistoryAdapter>? =
+        null
+
+    private val TAG = "DigitalWallet"
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,10 +66,170 @@ class DigitalWallet : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadWalletInfo()
+        with(binding) {
+            walletLayout.visible(false)
+            createDigitalWallet.visible(false)
+            //noWalletLayout.visible(true)
+            val layoutManager = LinearLayoutManager(requireContext())
+            rvWalletHistory.layoutManager = layoutManager
+            rvWalletHistory.addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    layoutManager.orientation
+                )
+            )
+        }
+        requireContext().showProgress()
+        getWalletDetails()
+        hideProgress()
+
+        //loadWalletInfo()
 
 
     }
+
+    private fun getWalletDetails() {
+        Log.d(TAG, "getWalletDetails: ")
+        val user = getUser(auth.uid!!)!!
+        //requireContext().showProgress()
+        CoroutineScope(Dispatchers.IO).launch {
+
+            if (user.wallet.isEmpty()){
+                //hideProgress()
+                binding.createDigitalWallet.visible(true)
+                binding.createDigitalWallet.setOnClickListener {
+                    val newWallet = WalletData(
+                        walletId = hashString(
+                            "${auth.uid}${
+                                System.currentTimeMillis().toString()
+                            }"
+                        ),
+                        walletOwner = auth.uid!!,
+                        walletBalance = "0.0"
+                    )
+                    createWallet(newWallet)
+                    //create wallet
+                }
+            }else{
+                //hideProgress()
+                //binding.createDigitalWallet.visible(false)
+
+                walletCollectionRef.document(user.wallet).get().addOnSuccessListener { doc ->
+                    val walletInfo = doc.toObject(WalletData::class.java)
+                    binding.walletLayout.visible(true)
+                    binding.walletBalance.text = resources.getString(R.string.euro_money_text, walletInfo!!.walletBalance)
+                    binding.fundDigitalWallet.setOnClickListener {
+                        launchFundWalletDialog()
+//                        val bottomSheetFragment = FundWalletBottomSheet.newInstance()
+//                        bottomSheetFragment.setListener(this@DigitalWallet) // Pass the listener to the BottomSheet
+//                        bottomSheetFragment.show(childFragmentManager, "bottomSheetTag")
+//                        //fetchWalletDetails(walletId)
+                    }
+                    getWalletHistory(walletInfo.walletId)
+                }
+            }
+//            walletCollectionRef//.document(user!!.wallet)
+//                .get()
+//                .addOnSuccessListener { wallets: QuerySnapshot ->
+//                    hideProgress()
+//                    if (wallets.isEmpty) {
+//                        //no wallets
+//                        //show to create new
+//                        binding.createDigitalWallet.visible(true)
+//                        binding.createDigitalWallet.setOnClickListener {
+//                            val newWallet = WalletData(
+//                                walletId = hashString(
+//                                    "${auth.uid}${
+//                                        System.currentTimeMillis().toString()
+//                                    }"
+//                                ),
+//                                walletOwner = auth.uid!!,
+//                                walletBalance = "0.0"
+//                            )
+//                            launchCreateWalletDialog(newWallet)
+//                            //create wallet
+//                            //createWallet(newWallet, dialog)
+//                        }
+//
+//                    } else {
+//                        //binding.noWalletLayout.visible(false)
+//
+//                        for (doc in wallets.documents) {
+//                            val wallet = doc.toObject(WalletData::class.java)
+//                            if (wallet?.walletOwner == auth.uid!!) {
+//                                hasWallet = true
+//
+//                                binding.walletLayout.visible(true)
+//                                Log.d(TAG, "getWalletDetails: $hasWallet")
+//                                //binding.noWalletLayout.visible(false)
+//                                fetchWalletDetails(walletId = wallet.walletId)
+//                                return@addOnSuccessListener
+//                            } else {
+//                                //binding.noWalletLayout.visible(true)
+//                                hasWallet = false
+//                            }
+//                        }
+//                        Log.d(TAG, "getWalletDetails: $hasWallet")
+//                        binding.createDigitalWallet.visible(!hasWallet)
+//                        binding.createDigitalWallet.setOnClickListener {
+//                            val newWallet = WalletData(
+//                                walletId = hashString(
+//                                    "${auth.uid}${
+//                                        System.currentTimeMillis().toString()
+//                                    }"
+//                                ),
+//                                walletOwner = auth.uid!!,
+//                                walletBalance = "0.0"
+//                            )
+//                            launchCreateWalletDialog(newWallet)
+//                            //create wallet
+//                        }
+//                    }
+//                }
+        }
+    }
+    private fun getWalletHistory(walletId: String) {
+
+
+        val walletHistory =
+            walletCollectionRef.document(walletId).collection(WALLET_HISTORY_REF)
+
+        val options = FirestoreRecyclerOptions.Builder<WalletHistory>()
+            .setQuery(walletHistory, WalletHistory::class.java).build()
+        try {
+            walletHistoryAdapter = object :
+                FirestoreRecyclerAdapter<WalletHistory, WalletHistoryAdapter>(options) {
+                override fun onCreateViewHolder(
+                    parent: ViewGroup,
+                    viewType: Int
+                ): WalletHistoryAdapter {
+                    val itemView = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_wallet_history_layout, parent, false)
+                    return WalletHistoryAdapter(itemView)
+                }
+
+                override fun onBindViewHolder(
+                    holder: WalletHistoryAdapter,
+                    position: Int,
+                    model: WalletHistory
+                ) {
+                    //val timeToDeliver = model.supposedTime
+                    holder.walletTransactionDate.text = model.transactionDate
+                    holder.walletTransactionType.text = model.transactionType
+                    holder.walletTransactionReason.text = model.transactionReason
+                    holder.walletTransactionAmount.text = model.transactionAmount
+                }
+            }
+
+        } catch (e: Exception) {
+            requireActivity().toast(e.message.toString())
+        }
+        walletHistoryAdapter?.startListening()
+        binding.rvWalletHistory.adapter = walletHistoryAdapter
+
+
+    }
+
 
     private fun loadWalletInfo() {
         //checkWalletAvailability()
@@ -135,8 +307,10 @@ class DigitalWallet : Fragment() {
                         clientCollectionRef.document(auth.uid!!)
                             .update("wallet", newWallet.walletId)
                         hideProgress()
-                        loadWalletInfo()
-                        //binding.createDigitalWallet.visible(false)
+                        binding.createDigitalWallet.visible(false)
+                        getWalletDetails()
+                        //fetchWalletDetails(newWallet.walletId)
+
                         //binding.walletLayout.visible(true)
                         //fetchWalletDetails(newWallet.walletId)
                     }//.await()
@@ -146,7 +320,10 @@ class DigitalWallet : Fragment() {
                 }
             }
         }
+
+
     }
+
 
     private fun fundWallet(fundAmount: String, dialog: AlertDialog) {
         val walletId = getUser(auth.uid!!)!!.wallet
@@ -187,7 +364,7 @@ class DigitalWallet : Fragment() {
                             System.currentTimeMillis().toString()
                         ).set(walletTransaction).await()
                         //fetchWalletDetails(walletId)
-
+                        getWalletDetails()
                         dialog.dismiss()
 
                     }
@@ -197,7 +374,6 @@ class DigitalWallet : Fragment() {
 
     }
     private fun getUser(userId: String): Client? {
-        requireContext().showProgress()
         val deferred = CoroutineScope(Dispatchers.IO).async {
             try {
                 val snapshot = clientCollectionRef.document(userId).get().await()
@@ -215,7 +391,6 @@ class DigitalWallet : Fragment() {
         }
 
         val clientUser = runBlocking { deferred.await() }
-        hideProgress()
 
         return clientUser
     }

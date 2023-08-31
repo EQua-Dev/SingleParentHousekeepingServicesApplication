@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.BookService
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Client
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Facility
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.FacilityRequestResponse
@@ -64,6 +65,8 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
             requireView().findViewById<TextView>(R.id.facility_generated_invoice_customer_email)
         val tvServiceName =
             requireView().findViewById<TextView>(R.id.facility_generated_invoice_request_service_name)
+        val tvServiceFrequency =
+            requireView().findViewById<TextView>(R.id.facility_generated_invoice_request_service_frequency)
         val tvServicePrice =
             requireView().findViewById<TextView>(R.id.facility_generated_invoice_request_service_price)
         val tvServiceDiscountedPrice =
@@ -78,6 +81,7 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
         val organisation = getOrganisation(facilityRequestResponse.organisationID)!!
         val client = getUser(facilityRequestResponse.customerID)!!
         val service = getService(facilityRequestResponse.organisationProfileServiceID)!!
+        val requestForm = getRequestForm(facilityRequestResponse.requestFormID)!!
 
 
         tvFacilityName.text = resources.getString(
@@ -113,6 +117,7 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
             R.string.facility_generate_request_invoice_service_name,
             service.organisationOfferedServiceName
         )
+        tvServiceFrequency.text = resources.getString(R.string.facility_generate_request_invoice_service_frequency, requestForm.requestedServiceFrequency)
         tvServicePrice.text = resources.getString(
             R.string.facility_generate_request_invoice_service_price,
             service.organisationOfferedServicePrice
@@ -124,8 +129,10 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
 
 //        val servicePrice = scheduledService.servicePrice
 //        val serviceDiscountedPrice = scheduledService.serviceDiscountedPrice
-        val totalServicePrice =
-            service.organisationOfferedServicePrice.toDouble() - service.serviceDiscountedPrice.toDouble()
+        val totalServicePrice = if (service.organisationOfferedServicePrice.toDouble() < service.serviceDiscountedPrice.toDouble())
+            service.organisationOfferedServicePrice.toDouble()
+        else
+            service.serviceDiscountedPrice.toDouble()
         //Log.d(TAG, "onViewCreated: ${service.serviceDiscountedPrice} $service.")
         tvServiceTotal.text = resources.getString(
             R.string.facility_generate_request_invoice_service_total_price,
@@ -192,6 +199,30 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
         hideProgress()
 
         return service
+    }
+    private fun getRequestForm(requestFormIdId: String): BookService? {
+
+        requireContext().showProgress()
+        val deferred = CoroutineScope(Dispatchers.IO).async {
+            try {
+                val snapshot = Common.servicesCollectionRef.document(requestFormIdId).get().await()
+                if (snapshot.exists()) {
+                    return@async snapshot.toObject(BookService::class.java)
+                } else {
+                    return@async null
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    requireContext().toast(e.message.toString())
+                }
+                return@async null
+            }
+        }
+
+        val requestForm = runBlocking { deferred.await() }
+        hideProgress()
+
+        return requestForm
     }
     private fun getServiceType(serviceTypeId: String): ServiceType? {
 

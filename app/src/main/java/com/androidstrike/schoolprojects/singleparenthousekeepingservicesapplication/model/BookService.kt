@@ -18,4 +18,6 @@ data class BookService(
     var dateCreated: String = "",
     var timeCreated: String = "",
     var requestStatus: String = "",
+    val isRated: Boolean = false
+
 ): Parcelable

@@ -315,6 +315,7 @@ val bottomSheetServiceFrequency =
                 clientEmailAddress,
                 tvServiceName.text.toString(),
                 serviceStartDate,
+                bookService.requestedServiceFrequency,
                 dateCreated,
                 timeCreated
             )

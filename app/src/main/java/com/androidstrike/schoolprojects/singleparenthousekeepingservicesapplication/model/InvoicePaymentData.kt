@@ -4,20 +4,20 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class AcceptedRequestInvoice(
+data class InvoicePaymentData(
+    val paymentID: String = "",
     val invoiceID: String = "",
     val notificationID: String = "",
     val customerRequestFormID: String = "",
     val customerID: String = "",
-    val organisationID: String= "",
+    val customerDigitalWalletID: String = "",
+    val organisationID: String = "",
     val organisationProfileServiceID: String = "",
     val typeOfServiceID: String = "",
-    val categoryOfServiceID: String = "",
-    val invoiceAmount: String = "",
-    val bankName: String = "",
-    val bankAccountIBAN: String = "",
-    val bankAccountHolderName: String = "",
-    val invoiceText: String = "",
-    val dateCreated: String = "",
-    val timeCreated: String = "",
-    ): Parcelable
+    val paymentAmount: String = "",
+    val paymentBankIBAN: String = "",
+    val paymentBankName: String = "",
+    val paymentBankAccountHolderName: String = "",
+    val paymentDate: String = "",
+    val paymentTime: String = ""
+): Parcelable

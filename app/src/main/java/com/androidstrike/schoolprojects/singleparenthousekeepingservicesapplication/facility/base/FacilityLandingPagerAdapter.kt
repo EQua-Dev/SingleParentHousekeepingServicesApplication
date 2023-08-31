@@ -15,7 +15,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.facility.facilitynotification.FacilityNotification
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.facility.facilityprofile.FacilityProfile
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.facility.facilityservice.FacilityAddService
-import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.landing.FeedbackRating
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientfeedback.FeedbackRating
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.facility.facilityrating.FacilityRating
 
 /**
  * Created by Richard Uzor  on 28/01/2023
@@ -41,7 +42,7 @@ class FacilityLandingPagerAdapter (var context: FragmentActivity?,
                 FacilityNotification()
             }
             3 -> {
-                FeedbackRating()
+                FacilityRating()
             }
             else -> getItem(position)
         }
