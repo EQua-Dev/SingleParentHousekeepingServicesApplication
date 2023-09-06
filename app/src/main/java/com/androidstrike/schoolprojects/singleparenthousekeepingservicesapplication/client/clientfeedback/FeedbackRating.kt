@@ -143,7 +143,7 @@ class FeedbackRating : Fragment(), RatingBottomSheetListener {
 
         val clientPaidService =
             Common.appointmentsCollectionRef.whereEqualTo("customerID", mAuth.uid)
-                .whereEqualTo("requestStatus", "paid").whereEqualTo("isRated", false)
+                .whereEqualTo("requestStatus", "paid").whereEqualTo("rated", false)
 
         val options = FirestoreRecyclerOptions.Builder<BookService>()
             .setQuery(clientPaidService, BookService::class.java).build()

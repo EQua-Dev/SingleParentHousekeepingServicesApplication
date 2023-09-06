@@ -205,7 +205,7 @@ class FacilityCustomerRequestResponseBottomSheet : BottomSheetDialogFragment() {
         requireContext().showProgress()
         val deferred = CoroutineScope(Dispatchers.IO).async {
             try {
-                val snapshot = Common.servicesCollectionRef.document(requestFormIdId).get().await()
+                val snapshot = Common.appointmentsCollectionRef.document(requestFormIdId).get().await()
                 if (snapshot.exists()) {
                     return@async snapshot.toObject(BookService::class.java)
                 } else {

@@ -79,7 +79,7 @@
     <string name="wallet_title">Create and Fund Digital Wallet for Customer</string>
     <string name="notification_placeholder">View Notification</string>
 
-    <string name="facility_add_service_title">Add Service to Facility Profile</string>
+    <string name="facility_add_service_title">Upload New Service</string>
     <string name="facility_add_service_category">Select Category of Provided Service</string>
     <string name="facility_add_service_description">Service Name</string>
     <string name="facility_add_service_price">Service Price (€)</string>
