@@ -216,6 +216,10 @@
     <string name="wallet_history_title">Wallet Transaction History</string>
     <string name="euro_money_text">EUR %s</string>
     <string name="facility_rating_title">View Customer Ratings</string>
+    <string name="phone_verification_title">OTP Verification</string>
+    <string name="phone_verification_subtitle">Enter OTP Code for 2FA</string>
+    <string name="enter_code">Enter Code</string>
+    <string name="two_fa_btn">Confirm</string>
 
 
     <string-array name="service_available_places_option">
