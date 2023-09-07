@@ -166,7 +166,7 @@
     <string name="facility_generate_request_invoice_service_price">Service price: €%s</string>
     <string name="facility_generate_request_invoice_service_discounted_price">Service discounted price: €%s</string>
     <string name="facility_generate_request_invoice_service_total_price">Request Total: €%s</string>
-    <string name="invoice_text">Dear %s,\n\nYour request for %s has been %s.\nPlease, provide required payment for the requested service to Bank name (%s), Account IBAN (%s), Account holder name (%s) in order to avail the service.\n\nDate created: %s\nTime created: %s</string>
+    <string name="invoice_text">Dear %s,\n\nYour request for %s has been %s.\nPlease, provide required payment for the requested service to Bank name (%s), Account IBAN (%s), Account holder name (%s) in order to avail the service.</string>
 
 
     <string name="service_type">Service Type: %s</string>
