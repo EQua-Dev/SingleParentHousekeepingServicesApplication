@@ -101,7 +101,14 @@ fun Context.showProgressDialog(): Dialog {
         return it
     }
 }
-
+fun changeFirstCharacter(inputString: String, newChar: String): String {
+    if (inputString.isEmpty()) {
+        // Handle the case where the input string is empty
+        return inputString
+    }
+    // Create a new string by concatenating the replacement and the rest of the original string
+    return newChar + inputString.substring(1)
+}
 //function to change milliseconds to date format
 fun getDate(milliSeconds: Long?, dateFormat: String?): String {
     // Create a DateFormatter object for displaying date in specified format.

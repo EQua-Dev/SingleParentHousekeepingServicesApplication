@@ -1,4 +1,4 @@
-package com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model
+package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model
 
 data class WalletHistory(
     val transactionDate: String = "",

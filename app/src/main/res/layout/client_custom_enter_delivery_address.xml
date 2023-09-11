@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_mini"
+        android:padding="@dimen/padding_mini">
+
+        <TextView
+            android:id="@+id/client_delivery_address_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_midi"
+            android:text="@string/client_delivery_address_title"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_xl" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_client_delivery_street_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/client_delivery_address_title"
+            android:layout_margin="@dimen/padding_mini"
+            android:hint="@string/client_delivery_street_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/client_delivery_street_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_mini"
+                android:contentDescription="@string/client_delivery_street_address"
+                android:importantForAutofill="no"
+                android:labelFor="@id/client_delivery_street_address"
+                android:padding="@dimen/padding_maxi" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_client_delivery_city_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_input_layout_client_delivery_street_address"
+            android:layout_margin="@dimen/padding_mini"
+            android:hint="@string/client_delivery_city_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/client_delivery_city_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_mini"
+                android:contentDescription="@string/client_delivery_city_address"
+                android:importantForAutofill="no"
+                android:labelFor="@id/client_delivery_city_address"
+                android:padding="@dimen/padding_maxi" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_client_delivery_eir_code_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_input_layout_client_delivery_city_address"
+            android:layout_margin="@dimen/padding_mini"
+            android:hint="@string/client_delivery_eir_code_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/client_delivery_eir_code_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_mini"
+                android:contentDescription="@string/client_delivery_eir_code_address"
+                android:importantForAutofill="no"
+                android:labelFor="@id/client_delivery_eir_code_address"
+                android:padding="@dimen/padding_maxi" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/client_submit_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_input_layout_client_delivery_eir_code_address"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/margin_midi"
+            android:backgroundTint="@color/custom_client_accent_color"
+            android:padding="@dimen/padding_mini"
+            android:text="@string/facility_add_service_submit_button" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

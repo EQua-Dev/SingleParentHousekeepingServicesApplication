@@ -5,4 +5,5 @@
     <color name="custom_client_accent_color">#E65184</color>
     <color name="custom_facility_accent_color">#42A5F5</color>
     <color name="red">#FF0000</color>
+    <color name="green">#81C784</color>
 </resources>

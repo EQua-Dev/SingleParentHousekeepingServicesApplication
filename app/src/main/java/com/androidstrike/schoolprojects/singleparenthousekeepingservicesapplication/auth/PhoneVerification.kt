@@ -2,14 +2,16 @@ package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplica
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.databinding.FragmentPhoneVerificationBinding
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.auth
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.changeFirstCharacter
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -26,7 +28,6 @@ class PhoneVerification : Fragment() {
 
     private val arg: PhoneVerificationArgs by navArgs()
     private lateinit var userPhoneNumber: String
-    private lateinit var role: String
 
     lateinit var sentCode: String
 
@@ -47,15 +48,22 @@ class PhoneVerification : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         userPhoneNumber = arg.phoneNumber
-        role = arg.role
+        Log.d(TAG, "userPhoneNumber: $userPhoneNumber")
 
-        val options = PhoneAuthOptions.newBuilder(auth)
+        val numberToSend = changeFirstCharacter(userPhoneNumber, "+353")
+        Log.d(TAG, "numberToSend: $numberToSend")
+        val options = PhoneAuthOptions.newBuilder(Common.auth)
             .setPhoneNumber(userPhoneNumber) // Phone number to verify
+//            .setPhoneNumber(numberToSend) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
+
+//        binding.twoFaBtn.setOnClickListener {
+//            verifyCode()
+//        }
 
 
     }
@@ -75,13 +83,8 @@ class PhoneVerification : Fragment() {
                 val enteredCode = binding.phoneVerificationCode.text.toString().trim()
                 if (enteredCode == credential.smsCode){
                     requireContext().toast("code valid")
-                    if (role == "client"){
-                        val navToClientHome = PhoneVerificationDirections.actionPhoneVerificationToClientBaseScreen()
-                        findNavController().navigate(navToClientHome)
-                    }else{
-                        val navToFacilityHome = PhoneVerificationDirections.actionPhoneVerificationToFacilityBaseScreen()
-                        findNavController().navigate(navToFacilityHome)
-                    }
+                    val navToHome = PhoneVerificationDirections.actionPhoneVerificationToClientBaseScreen()
+                    findNavController().navigate(navToHome)
                 }
                 else{
                     requireContext().toast("code invalid")
@@ -128,18 +131,43 @@ class PhoneVerification : Fragment() {
             Log.d(TAG, "verifyCode: ${this.sentCode} $enteredCode ${credential.smsCode}")
             if (enteredCode == credential.smsCode){
                 requireContext().toast("code valid")
-                if (role == "client"){
-                    val navToClientHome = PhoneVerificationDirections.actionPhoneVerificationToClientBaseScreen()
-                    findNavController().navigate(navToClientHome)
-                }else{
-                    val navToFacilityHome = PhoneVerificationDirections.actionPhoneVerificationToFacilityBaseScreen()
-                    findNavController().navigate(navToFacilityHome)
-                }
+                val navToHome = PhoneVerificationDirections.actionPhoneVerificationToClientBaseScreen()
+                findNavController().navigate(navToHome)
             }
             else{
                 requireContext().toast("code invalid")
+                auth.signOut()
+                findNavController().popBackStack()
             }
         }
+
+        //signInWithPhoneAuthCredential(credential)
+
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+
+                    val user = task.result?.user
+                    requireContext().toast("Success")
+                    // TODO: make it not to create a new user with the phone number
+                    val navToHome = PhoneVerificationDirections.actionPhoneVerificationToClientBaseScreen()
+                    findNavController().navigate(navToHome)
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    requireContext().toast(task.exception.toString())
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                    }
+                    // Update UI
+                    requireContext().toast(task.exception.toString())
+                }
+            }
     }
 
 

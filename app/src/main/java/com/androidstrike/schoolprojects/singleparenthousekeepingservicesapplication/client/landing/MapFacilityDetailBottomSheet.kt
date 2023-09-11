@@ -1,9 +1,16 @@
 package com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.landing
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +25,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
@@ -36,8 +44,10 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgressDialog
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.visible
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +55,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -61,11 +72,14 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
     private lateinit var client: String
     private lateinit var facility: Facility
 
-    private val TAG =  "MapFacilityDetailBottomSheet"
+    private val TAG = "MapFacilityDetailBottomSheet"
 
     //private lateinit var facilityId: String
 
     private val calendar = Calendar.getInstance()
+
+    private val locationPermissionCode = 101
+
 
     private val facilityServices: MutableList<Service> = mutableListOf()
     private val facilityServicesNames: MutableList<String> = mutableListOf()
@@ -78,6 +92,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
     //    private val facilitySpecialists: MutableList<Specialists> = mutableListOf()
     private val facilitySpecialistsNames: MutableList<String> = mutableListOf()
 
+    private lateinit var customerAddress: String
 
     private var progressDialog: Dialog? = null
 
@@ -95,6 +110,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
 
 
         facility = arguments?.getParcelable<Facility>(ARG_FACILITY_DATA)!!
+        checkLocationPermission()
 
         getFacilityServiceDetails(facility.organisationID)
     }
@@ -119,7 +135,7 @@ class MapFacilityDetailBottomSheet : BottomSheetDialogFragment() {
             requireView().findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service)
         val bottomSheetServiceName =
             requireView().findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service_name)
-val bottomSheetServiceFrequency =
+        val bottomSheetServiceFrequency =
             requireView().findViewById<AutoCompleteTextView>(R.id.auto_complete_select_service_frequency)
 
         bottomSheetFacilityName.text = facility.organisationName
@@ -133,7 +149,11 @@ val bottomSheetServiceFrequency =
         Log.d("EQUA", "onViewCreated: $facilityServices")
 
         val serviceCategoryArrayAdapter =
-            ArrayAdapter(requireContext(), R.layout.drop_down_item, facilityServicesCategoriesNames.distinct())
+            ArrayAdapter(
+                requireContext(),
+                R.layout.drop_down_item,
+                facilityServicesCategoriesNames.distinct()
+            )
         bottomSheetServiceCategory.setAdapter(serviceCategoryArrayAdapter)
 
         bottomSheetServiceCategory.setOnItemClickListener { _, _, position, _ ->
@@ -145,18 +165,22 @@ val bottomSheetServiceFrequency =
             for (category in facilityServicesCategories)
                 if (selectedItem == category.serviceCategoryName) {
                     categoryId = category.serviceCategoryID
-                     }
+                }
             for (service in facilityServices)
                 if (categoryId == service.categoryOfServiceID)
                     facilityServicesNames.add(service.organisationOfferedServiceName)
 
             //getFacilitySpecificServiceDetails(facility.facilityId, serviceId)
             val facilityServiceNamesArrayAdapter =
-                ArrayAdapter(requireContext(), R.layout.drop_down_item, facilityServicesNames.distinct())
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_item,
+                    facilityServicesNames.distinct()
+                )
             bottomSheetServiceName
-        .setAdapter(
-            facilityServiceNamesArrayAdapter
-            )
+                .setAdapter(
+                    facilityServiceNamesArrayAdapter
+                )
             bottomSheetServiceName.setOnItemClickListener { _, _, position, _ ->
                 val selectedServiceName = facilityServiceNamesArrayAdapter.getItem(position)
                 var selectedServiceId = ""
@@ -170,7 +194,11 @@ val bottomSheetServiceFrequency =
                     "loadView: ${getService(selectedServiceId)!!.organisationServiceFrequency}"
                 )
                 val facilityServiceFrequenciesArrayAdapter =
-                    ArrayAdapter(requireContext(), R.layout.drop_down_item, getService(selectedServiceId)!!.organisationServiceFrequency)
+                    ArrayAdapter(
+                        requireContext(),
+                        R.layout.drop_down_item,
+                        getService(selectedServiceId)!!.organisationServiceFrequency
+                    )
                 bottomSheetServiceFrequency
                     .setAdapter(
                         facilityServiceFrequenciesArrayAdapter
@@ -184,12 +212,12 @@ val bottomSheetServiceFrequency =
             var selectedServiceId = ""
             var selectedServiceCategoryId = ""
             var selectedServiceTypeId = ""
-                var selectedServiceFrequency = ""
+            var selectedServiceFrequency = ""
             var selectedSpecificServicePrice = ""
             var selectedSpecificServiceDiscountPrice = ""
             var selectedAppointmentServiceAvailablePlaces = ""
             for (service in facilityServices)
-                if (bottomSheetServiceName.text.toString() == service.organisationOfferedServiceName){
+                if (bottomSheetServiceName.text.toString() == service.organisationOfferedServiceName) {
                     selectedServiceId = service.organisationProfileServiceID
                     selectedServiceCategoryId = service.categoryOfServiceID
                     selectedServiceTypeId = service.typeOfServiceID
@@ -202,9 +230,6 @@ val bottomSheetServiceFrequency =
                 }
 
 
-
-
-
 //            requestDeliveryOfGoodsOptions
 
             val bookService = BookService(
@@ -215,7 +240,7 @@ val bottomSheetServiceFrequency =
                 categoryOfServiceID = selectedServiceCategoryId,
                 typeOfServiceID = selectedServiceTypeId,
                 requestedServiceFrequency = selectedServiceFrequency
-                )
+            )
             launchPlaceRequestDialog(bookService)
 //
         }
@@ -269,7 +294,7 @@ val bottomSheetServiceFrequency =
         val tvRequestText =
             builder.findViewById<TextView>(R.id.tv_request_text)
         val btnSubmitRequest =
-            builder.findViewById<TextView>(R.id.submit_request)
+            builder.findViewById<Button>(R.id.submit_request)
 
         val service = getService(bookService.organisationProfileServiceID)!!
 
@@ -297,8 +322,9 @@ val bottomSheetServiceFrequency =
 
 
         val client = getUser(auth.uid!!)!!
+        val serviceCategory = getServiceCategory(bookService.categoryOfServiceID)!!
         Log.d(TAG, "launchPlaceRequestDialog: $client")
-        val clientName = "${client!!.customerFirstName} ${client.customerLastName}"
+        val clientName = "${client.customerFirstName} ${client.customerLastName}"
         val clientPhoneNumber = client.customerMobileNumber
         val clientEmailAddress = client.customerEmail
         val dateCreated = getDate(System.currentTimeMillis(), "dd-MM-yyyy")
@@ -308,17 +334,39 @@ val bottomSheetServiceFrequency =
             serviceStartDate = it.toString()
             tvRequestText.visible(serviceStartDate.isNotEmpty())
 
-            tvRequestText.text = resources.getString(
-                R.string.request_text,
-                clientName,
-                clientPhoneNumber,
-                clientEmailAddress,
-                tvServiceName.text.toString(),
-                serviceStartDate,
-                bookService.requestedServiceFrequency,
-                dateCreated,
-                timeCreated
-            )
+            if (serviceCategory.serviceCategoryName == "Delivery") {
+                checkLocationPermission()
+                tvRequestText.text =
+                resources.getString(
+                    R.string.request_text_delivery,
+                    clientName,
+                    clientPhoneNumber,
+                    clientEmailAddress,
+                    tvServiceName.text.toString(),
+                    serviceStartDate,//
+                    customerAddress,
+                    bookService.requestedServiceFrequency,
+                    dateCreated,
+                    timeCreated
+                )
+
+            } else {
+                tvRequestText.text =
+                    resources.getString(
+                        R.string.request_text,
+                        clientName,
+                        clientPhoneNumber,
+                        clientEmailAddress,
+                        tvServiceName.text.toString(),
+                        serviceStartDate,
+                        bookService.requestedServiceFrequency,
+                        dateCreated,
+                        timeCreated
+                    )
+            }
+
+            //show dialog to enter pick up address
+
 
             btnSubmitRequest.apply {
                 enable(tvRequestText.isVisible)
@@ -330,12 +378,86 @@ val bottomSheetServiceFrequency =
                     bookService.timeCreated = timeCreated
 
                     Log.d("EQUA", "launchPlaceRequestDialog: $bookService")
-                    bookAppointment(bookService, dialog)
+                    if (getServiceCategory(bookService.categoryOfServiceID)!!.serviceCategoryName == "Delivery") {
+                        //launch the address dialog
+                        dialog.dismiss()
+                        launchAddressDialog(bookService)
+                    } else {
+                        bookAppointment(bookService, dialog)
+                    }
                 }
             }
         }
 
         dialog.show()
+
+    }
+
+    private fun launchAddressDialog(bookService: BookService) {
+
+        val builder =
+            layoutInflater.inflate(
+                R.layout.client_custom_enter_delivery_address,
+                null
+            )
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(builder)
+            .setCancelable(false)
+            .create()
+
+        val tilStreet =
+            builder.findViewById<TextInputLayout>(R.id.text_input_layout_client_delivery_street_address)
+        val etStreet =
+            builder.findViewById<TextInputEditText>(R.id.client_delivery_street_address)
+        val tilCity =
+            builder.findViewById<TextInputLayout>(R.id.text_input_layout_client_delivery_city_address)
+        val etCity =
+            builder.findViewById<TextInputEditText>(R.id.client_delivery_city_address)
+        val tilEirCode =
+            builder.findViewById<TextInputLayout>(R.id.text_input_layout_client_delivery_eir_code_address)
+        val etEirCode =
+            builder.findViewById<TextInputEditText>(R.id.client_delivery_eir_code_address)
+        val btnSubmitAddress =
+            builder.findViewById<Button>(R.id.client_submit_address)
+
+        btnSubmitAddress.setOnClickListener {
+            tilStreet.error = null
+            tilCity.error = null
+            tilEirCode.error = null
+            val deliveryStreet = etStreet.text.toString().trim()
+            val deliveryCity = etCity.text.toString().trim()
+            val deliveryEirCode = etEirCode.text.toString().trim()
+            if (deliveryStreet.isEmpty()) {
+                tilStreet.error = resources.getString(R.string.delivery_street_empty)
+                return@setOnClickListener
+            }
+            if (deliveryCity.isEmpty()) {
+                tilCity.error = resources.getString(R.string.delivery_city_empty)
+                return@setOnClickListener
+            }
+            if (deliveryEirCode.isEmpty()) {
+                tilEirCode.error = resources.getString(R.string.delivery_eir_code_empty)
+                return@setOnClickListener
+            }
+            else{
+                bookService.deliveryStreet = deliveryStreet
+                bookService.deliveryCity = deliveryCity
+                bookService.deliveryEirCode = deliveryEirCode
+                bookService.clientAddress = customerAddress
+
+                bookAppointment(bookService, dialog)
+            }
+        }
+
+
+
+
+
+
+
+
+        dialog.show()
+
 
     }
 
@@ -404,6 +526,107 @@ val bottomSheetServiceFrequency =
             }
         }
     }
+
+
+    private fun checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is granted, you can request location updates.
+            getLocation()
+        } else {
+            // Request location permission
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                locationPermissionCode
+            )
+        }
+    }
+
+    // Override onRequestPermissionsResult to handle the permission request result.
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == locationPermissionCode) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, you can request location updates.
+                getLocation()
+            } else {
+                // Permission denied, handle this case as needed.
+                // For example, show a message to the user or disable location functionality.
+                requireContext().toast("Location permission denied. Cannot fetch location")
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                // Use the location object to get latitude and longitude.
+                val latitude = location.latitude
+                val longitude = location.longitude
+                customerAddress = getAddressFromLatLngString(requireContext(), latitude, longitude)
+
+                //launch dialog to enter delivery address
+
+
+                //navigateToLocation(latitude, longitude)
+
+                // Now you have the current location. You can use it as needed.
+                // For example, show it on a map or send it to your server.
+            } else {
+                // Location is null, handle this case as needed.
+                // For example, show an error message or request location updates.
+            }
+        }.addOnFailureListener { exception: Exception ->
+            // Handle the failure to get the location.
+            // For example, show an error message or request location updates.
+            requireContext().toast(exception.message.toString())
+        }
+    }
+
+    private fun getAddressFromLatLngString(
+        context: Context,
+        latitude: Double,
+        longitude: Double
+    ): String {
+
+        if (latitude == null || longitude == null) {
+            return "Invalid latitude or longitude"
+        }
+
+        val geocoder = Geocoder(context, Locale.getDefault())
+        var addressText = ""
+
+        try {
+            val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+
+            if (addresses != null && addresses.isNotEmpty()) {
+                val address: Address = addresses[0]
+
+                // Build the address as a string
+                val addressParts = ArrayList<String>()
+
+                for (i in 0..address.maxAddressLineIndex) {
+                    addressParts.add(address.getAddressLine(i))
+                }
+
+                addressText = addressParts.joinToString(separator = "\n")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return addressText
+    }
+
 
     private fun getFacilityServiceDetails(facilityId: String) {
         requireContext().showProgress()
@@ -488,6 +711,7 @@ val bottomSheetServiceFrequency =
 
         return service
     }
+
     private fun getServiceType(serviceTypeId: String): ServiceType? {
 
         requireContext().showProgress()
@@ -512,12 +736,14 @@ val bottomSheetServiceFrequency =
 
         return serviceType
     }
+
     private fun getServiceCategory(serviceCategoryId: String): ServiceCategory? {
 
         requireContext().showProgress()
         val deferred = CoroutineScope(Dispatchers.IO).async {
             try {
-                val snapshot = Common.serviceCategoryCollectionRef.document(serviceCategoryId).get().await()
+                val snapshot =
+                    Common.serviceCategoryCollectionRef.document(serviceCategoryId).get().await()
                 if (snapshot.exists()) {
                     return@async snapshot.toObject(ServiceCategory::class.java)
                 } else {

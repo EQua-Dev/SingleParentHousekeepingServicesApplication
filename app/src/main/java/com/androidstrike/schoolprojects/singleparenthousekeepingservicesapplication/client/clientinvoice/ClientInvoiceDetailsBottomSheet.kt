@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletData
-import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletHistory
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.WalletHistory
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.AcceptedRequestInvoice
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.BookService
@@ -35,7 +35,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
 class ClientInvoiceDetailsBottomSheet : BottomSheetDialogFragment() {
 

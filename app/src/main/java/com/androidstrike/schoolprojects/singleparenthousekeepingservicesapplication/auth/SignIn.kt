@@ -127,22 +127,19 @@ class SignIn : Fragment() {
                                 if (role == "client") {
                                     clientName = getCustomer(auth.uid!!)!!.customerFirstName
 
+                                    val navToHome = SignInDirections.actionSignInToClientBaseScreen()
+                                    findNavController().navigate(navToHome)
 
-                                    val navToPhoneVerification =
-                                        SignInDirections.actionSignInToPhoneVerification(
-                                            role = role,
-                                            getCustomer(auth.uid!!)!!.customerMobileNumber
-                                        )
-                                    findNavController().navigate(navToPhoneVerification)
+//                                    val navToPhoneVerification =
+//                                        SignInDirections.actionSignInToPhoneVerification(
+//                                            role = role,
+//                                            getCustomer(auth.uid!!)!!.customerMobileNumber
+//                                        )
+//                                    findNavController().navigate(navToPhoneVerification)
                                 } else {
                                     facilityName = getOrganisation(auth.uid!!)!!.organisationName
-
-                                    val navToPhoneVerification =
-                                        SignInDirections.actionSignInToPhoneVerification(
-                                            role = role,
-                                            getOrganisation(auth.uid!!)!!.organisationContactNumber
-                                        )
-                                    findNavController().navigate(navToPhoneVerification)
+                                    val navToHome = SignInDirections.actionSignInToFacilityBaseScreen()
+                                    findNavController().navigate(navToHome)
                                 }
 
                             }

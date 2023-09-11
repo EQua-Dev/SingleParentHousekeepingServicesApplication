@@ -18,6 +18,11 @@ data class BookService(
     var dateCreated: String = "",
     var timeCreated: String = "",
     var requestStatus: String = "",
+    var deliveryStreet: String = "",
+    var deliveryCity: String = "",
+    var deliveryEirCode: String = "",
+    var clientAddress: String = "",
     val isRated: Boolean = false
+
 
 ): Parcelable

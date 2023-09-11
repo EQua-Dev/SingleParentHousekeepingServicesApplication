@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletData
-import com.androidstrike.schoolprojects.mentalhealthproblemsapplication.model.WalletHistory
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.WalletHistory
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.databinding.FragmentDigitalWalletBinding
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.Client
@@ -34,6 +34,8 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -192,7 +194,7 @@ class DigitalWallet : Fragment() {
 
 
         val walletHistory =
-            walletCollectionRef.document(walletId).collection(WALLET_HISTORY_REF)
+            walletCollectionRef.document(walletId).collection(WALLET_HISTORY_REF).orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<WalletHistory>()
             .setQuery(walletHistory, WalletHistory::class.java).build()

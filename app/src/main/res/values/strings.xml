@@ -178,6 +178,7 @@
     <string name="available_places">Available Places: %s</string>
     <string name="service_start_date">Service Start Date</string>
     <string name="request_text">Dear Sirs,\n\nMy name is %s, %s, %s. I require your provided service %s, starting from %s.\n\nPlease let me know if you can accommodate my request %s.\n\nDate Created: %s\nTime Created: %s</string>
+    <string name="request_text_delivery">Dear Sirs,\n\nMy name is %s, %s, %s. I require your provided service %s, on %s to my address %s.\n\nPlease let me know if you can accommodate my request %s.\n\nDate Created: %s\nTime Created: %s</string>
     <string name="submit_request">Submit Request</string>
     <string name="invalid_password">A Strong Password Should be minimum of 8 characters in length, Containing upper and lower case letters, special characters and digits.</string>
     <string name="invalid_email">A Valid Email Address should contain a valid email domain (gmail.com, hotmail.com, yahoo.com, outlook.com, live.com) and has the @ sign before it</string>
@@ -220,6 +221,16 @@
     <string name="phone_verification_subtitle">Enter OTP Code for 2FA</string>
     <string name="enter_code">Enter Code</string>
     <string name="two_fa_btn">Confirm</string>
+    <string name="client_delivery_address_title">Deivery Address</string>
+    <string name="client_delivery_street_address">Street Address</string>
+    <string name="client_delivery_city_address">City</string>
+    <string name="client_delivery_eir_code_address">EirCode</string>
+    <string name="delivery_street_empty">Street cannot be empty</string>
+    <string name="delivery_city_empty">City cannot be empty</string>
+    <string name="delivery_eir_code_empty">EirC Code cannot be empty</string>
+    <string name="request_delivery_address_street">Delivery Street: %s</string>
+    <string name="request_delivery_address_city">Delivery City: %s</string>
+    <string name="request_delivery_address_eir_code">Delivery Eir Code: %s</string>
 
 
     <string-array name="service_available_places_option">

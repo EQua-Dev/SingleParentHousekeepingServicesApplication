@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.R
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.model.BookService
@@ -24,6 +25,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.hideProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.visible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,10 +75,18 @@ class FacilityCustomerRequestDetailBottomSheet : BottomSheetDialogFragment() {
             requireView().findViewById<TextView>(R.id.facility_request_service_discounted_price)
         val tvRequestText =
             requireView().findViewById<TextView>(R.id.facility_request_text)
-        val tvRequestedDateCreated =
-            requireView().findViewById<TextView>(R.id.facility_request_date_created)
-        val tvRequestedTimeCreated =
-            requireView().findViewById<TextView>(R.id.facility_request_time_created)
+        val llDeliveryAddress =
+            requireView().findViewById<LinearLayout>(R.id.layout_delivery_address)
+        val tvDeliveryStreet =
+            requireView().findViewById<TextView>(R.id.request_delivery_address_street)
+        val tvDeliveryCity =
+            requireView().findViewById<TextView>(R.id.request_delivery_address_city)
+        val tvDeliveryEirCode =
+            requireView().findViewById<TextView>(R.id.request_delivery_address_eir_code)
+//        val tvRequestedDateCreated =
+//            requireView().findViewById<TextView>(R.id.facility_request_date_created)
+//        val tvRequestedTimeCreated =
+//            requireView().findViewById<TextView>(R.id.facility_request_time_created)
         val btnAcceptRequest =
             requireView().findViewById<Button>(R.id.btn_facility_accept_customer_request)
         val btnRejectRequest =
@@ -85,6 +95,15 @@ class FacilityCustomerRequestDetailBottomSheet : BottomSheetDialogFragment() {
         val client = getUser(requestedService.customerID)!!
         val service = getService(requestedService.organisationProfileServiceID)!!
         val serviceCategory = getServiceCategory(requestedService.categoryOfServiceID)!!
+
+        if (serviceCategory.serviceCategoryName == "Delivery"){
+            llDeliveryAddress.visible(true)
+            tvDeliveryStreet.text = resources.getString(R.string.request_delivery_address_street, requestedService.deliveryStreet)
+            tvDeliveryCity.text = resources.getString(R.string.request_delivery_address_city, requestedService.deliveryCity)
+            tvDeliveryEirCode.text = resources.getString(R.string.request_delivery_address_eir_code, requestedService.deliveryEirCode)
+        }else{
+            llDeliveryAddress.visible(false)
+        }
 
         tvClientName.text = resources.getString(
             R.string.requesting_client_name,
@@ -113,10 +132,10 @@ class FacilityCustomerRequestDetailBottomSheet : BottomSheetDialogFragment() {
             service.serviceDiscountedPrice
         )
         tvRequestText.text = requestedService.requestFormText
-        tvRequestedDateCreated.text =
-            resources.getString(R.string.requesting_date_created, requestedService.dateCreated)
-        tvRequestedTimeCreated.text =
-            resources.getString(R.string.requesting_time_created, requestedService.timeCreated)
+//        tvRequestedDateCreated.text =
+//            resources.getString(R.string.requesting_date_created, requestedService.dateCreated)
+//        tvRequestedTimeCreated.text =
+//            resources.getString(R.string.requesting_time_created, requestedService.timeCreated)
         btnAcceptRequest.setOnClickListener {
             val currentDate = getDate(System.currentTimeMillis(), "dd-MM-yyyy")
             val currentTime = getDate(System.currentTimeMillis(), "hh:mm a")
