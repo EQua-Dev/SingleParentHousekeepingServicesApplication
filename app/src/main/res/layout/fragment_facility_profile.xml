@@ -82,43 +82,48 @@
         android:layout_below="@id/txt_facility_profile_phone_title"
         android:id="@+id/txt_facility_profile_phone"/>
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/profile_date_joined"-->
-<!--        android:padding="@dimen/padding_mini"-->
-<!--        android:textSize="@dimen/text_xxs"-->
-<!--        android:layout_below="@id/txt_facility_profile_phone"-->
-<!--        android:id="@+id/txt_facility_profile_date_joined_title"/>-->
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        tools:text="New Rehab"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="@dimen/text_s"-->
-<!--        android:padding="@dimen/padding_mini"-->
-<!--        android:layout_below="@id/txt_facility_profile_date_joined_title"-->
-<!--        android:id="@+id/txt_facility_profile_date_joined"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_facility_profile_phone_title"
+        android:id="@+id/layout_edit_number"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_mini"
+        android:weightSum="4">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/profile_services"-->
-<!--        android:padding="@dimen/padding_mini"-->
-<!--        android:textSize="@dimen/text_xxs"-->
-<!--        android:layout_below="@id/txt_facility_profile_date_joined"-->
-<!--        android:id="@+id/txt_facility_profile_services_title"/>-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_facility_update_profile_phone_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_mini"
+            android:layout_weight="3"
+            android:hint="@string/facility_update_profile_phone_number">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        tools:text="New Rehab"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="@dimen/text_s"-->
-<!--        android:padding="@dimen/padding_mini"-->
-<!--        android:layout_below="@id/txt_facility_profile_services_title"-->
-<!--        android:id="@+id/txt_facility_profile_services"/>-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/facility_update_profile_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_mini"
+                android:contentDescription="@string/facility_update_profile_phone_number"
+                android:importantForAutofill="no"
+                android:labelFor="@id/facility_update_profile_phone_number"
+                android:padding="@dimen/padding_maxi" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/txt_submit_number_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/facility_submit_update_profile"
+            android:textAlignment="center"
+            android:textColor="@color/custom_facility_accent_color"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/facility_edit_profile_btn"

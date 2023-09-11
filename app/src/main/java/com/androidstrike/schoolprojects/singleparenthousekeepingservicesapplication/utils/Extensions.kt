@@ -55,6 +55,16 @@ fun View.snackBar(message: String, action: (() -> Unit)? = null) {
     }
     snackbar.show()
 }
+
+fun View.serviceSnackBar(message: String, action: (() -> Unit)? = null) {
+    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+    action?.let {
+        snackbar.setAction("Okay") {
+            it()
+        }
+    }
+    snackbar.show()
+}
 fun View.loginSnackBar(message: String, action: (() -> Unit)? = null) {
     val snackBar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
     action?.let {

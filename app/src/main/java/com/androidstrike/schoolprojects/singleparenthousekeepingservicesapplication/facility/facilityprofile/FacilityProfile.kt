@@ -15,6 +15,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.auth
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.toast
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.visible
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,9 @@ class FacilityProfile : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var facility: Facility
+
+    private var isEditing = false
+
 
     var serviceNames: MutableList<String> = mutableListOf()
 
@@ -50,8 +54,30 @@ class FacilityProfile : Fragment() {
 
 
         binding.facilityEditProfileBtn.setOnClickListener {
-            launchEditProfileDialog(facility)
+            isEditing = true
+            binding.txtFacilityProfilePhone.visible(false)
+            binding.layoutEditNumber.visible(true)
         }
+
+            binding.txtSubmitNumberUpdate.setOnClickListener {
+                binding.textInputLayoutFacilityUpdateProfilePhoneNumber.error = null
+
+                val newPhoneNumber = binding.facilityUpdateProfilePhoneNumber.text.toString().trim()
+
+                val isIrishNumber = newPhoneNumber.startsWith("083")|| newPhoneNumber.startsWith("085")|| newPhoneNumber.startsWith("086")|| newPhoneNumber.startsWith("087")|| newPhoneNumber.startsWith("089")
+
+                if (newPhoneNumber.isEmpty()|| newPhoneNumber.length != resources.getInteger(R.integer.phone_number_length) || !isIrishNumber){
+                    binding.textInputLayoutFacilityUpdateProfilePhoneNumber.error = resources.getString(R.string.invalid_phone_number)
+                    binding.facilityUpdateProfilePhoneNumber.requestFocus()
+                    return@setOnClickListener
+                }
+                else{
+                    updateProfile(newPhoneNumber, facility)
+                }
+            }
+
+//            launchEditProfileDialog(facility)
+        //}
 
 
     }
@@ -155,7 +181,7 @@ class FacilityProfile : Fragment() {
                 etNewPhoneNumber.requestFocus()
             }
             else{
-                updateProfile(newPhoneNumber, facility, dialog)
+                updateProfile(newPhoneNumber, facility)
             }
 
         }
@@ -173,8 +199,7 @@ class FacilityProfile : Fragment() {
 
     private fun updateProfile(
         newNumber: String,
-        model: Facility,
-        dialog: AlertDialog
+        model: Facility
     ) = CoroutineScope(Dispatchers.IO).launch {
         val documentRef = Common.facilityCollectionRef.document(model.organisationID)
 
@@ -187,7 +212,9 @@ class FacilityProfile : Fragment() {
                 // Update successful
                 requireContext().toast("Update successful")
                 getOrganisationDetails()
-                dialog.dismiss()
+                binding.facilityUpdateProfilePhoneNumber.text?.clear()
+                binding.txtFacilityProfilePhone.visible(true)
+                binding.layoutEditNumber.visible(false)
 
             }
             .addOnFailureListener { e ->

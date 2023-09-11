@@ -19,6 +19,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.serviceCategoryCollectionRef
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.Common.serviceTypeCollectionRef
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.hideProgress
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.serviceSnackBar
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgress
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.showProgressDialog
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.utils.snackBar
@@ -276,7 +277,7 @@ class FacilityAddService : Fragment() {
                         facilityAddServiceFrequencyCb4.isChecked = false
                         facilityAddServiceFrequencyCb5.isChecked = false                    }
                     hideProgress()
-                    requireView().snackBar("Service Added")
+                    requireView().serviceSnackBar("Service Added")
                 }
                 //dismiss bottom sheet
 

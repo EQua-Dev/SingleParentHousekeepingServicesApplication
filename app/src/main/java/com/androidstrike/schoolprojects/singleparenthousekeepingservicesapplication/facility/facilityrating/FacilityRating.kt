@@ -21,6 +21,8 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -66,7 +68,7 @@ class FacilityRating : Fragment() {
         val mAuth = FirebaseAuth.getInstance()
 
         val organisationServiceRating =
-            Common.feedbackCollectionRef.whereEqualTo("organisationID", mAuth.uid)
+            Common.feedbackCollectionRef.whereEqualTo("organisationID", mAuth.uid).orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<ClientFeedBack>()
             .setQuery(organisationServiceRating, ClientFeedBack::class.java).build()
