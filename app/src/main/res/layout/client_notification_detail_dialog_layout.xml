@@ -51,19 +51,19 @@
             tools:lines="3"
             tools:text="@tools:sample/lorem/random" />
 
-        <TextView
-            android:id="@+id/txt_client_booking_response_detail_date_created"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_mini"
-            tools:text="@string/txt_client_booking_response_detail_date_created" />
+<!--        <TextView-->
+<!--            android:id="@+id/txt_client_booking_response_detail_date_created"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="@dimen/padding_mini"-->
+<!--            tools:text="@string/txt_client_booking_response_detail_date_created" />-->
 
-        <TextView
-            android:id="@+id/txt_client_booking_response_detail_time_created"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_mini"
-            tools:text="@string/txt_client_booking_response_detail_time_created" />
+<!--        <TextView-->
+<!--            android:id="@+id/txt_client_booking_response_detail_time_created"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="@dimen/padding_mini"-->
+<!--            tools:text="@string/txt_client_booking_response_detail_time_created" />-->
 
 
         <com.google.android.material.button.MaterialButton
