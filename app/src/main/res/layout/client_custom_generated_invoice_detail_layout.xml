@@ -60,29 +60,29 @@
             tools:text="@tools:sample/lorem/random"
             tools:lines="2"/>
 
-        <TextView
-            android:id="@+id/client_generated_invoice_date_created"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:layout_marginBottom="@dimen/padding_mini"
-            android:padding="@dimen/padding_mini"
-            tools:text="@string/requesting_date_created"
-            />
+<!--        <TextView-->
+<!--            android:id="@+id/client_generated_invoice_date_created"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/padding_mini"-->
+<!--            android:layout_marginTop="@dimen/padding_mini"-->
+<!--            android:layout_marginEnd="@dimen/padding_mini"-->
+<!--            android:layout_marginBottom="@dimen/padding_mini"-->
+<!--            android:padding="@dimen/padding_mini"-->
+<!--            tools:text="@string/requesting_date_created"-->
+<!--            />-->
 
-        <TextView
-            android:id="@+id/client_generated_invoice_time_created"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:layout_marginBottom="@dimen/padding_mini"
-            android:padding="@dimen/padding_mini"
-            tools:text="@string/requesting_time_created"
-            />
+<!--        <TextView-->
+<!--            android:id="@+id/client_generated_invoice_time_created"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/padding_mini"-->
+<!--            android:layout_marginTop="@dimen/padding_mini"-->
+<!--            android:layout_marginEnd="@dimen/padding_mini"-->
+<!--            android:layout_marginBottom="@dimen/padding_mini"-->
+<!--            android:padding="@dimen/padding_mini"-->
+<!--            tools:text="@string/requesting_time_created"-->
+<!--            />-->
 
 
         <com.google.android.material.button.MaterialButton

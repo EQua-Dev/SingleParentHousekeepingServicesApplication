@@ -26,6 +26,8 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -143,7 +145,8 @@ class FeedbackRating : Fragment(), RatingBottomSheetListener {
 
         val clientPaidService =
             Common.appointmentsCollectionRef.whereEqualTo("customerID", mAuth.uid)
-                .whereEqualTo("requestStatus", "paid").whereEqualTo("rated", false)
+                .whereEqualTo("requestStatus", "paid").whereEqualTo("rated", false).orderBy(
+                    FieldPath.documentId(), Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<BookService>()
             .setQuery(clientPaidService, BookService::class.java).build()

@@ -29,6 +29,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,7 +86,8 @@ class InvoicePayment : Fragment() {
         val mAuth = FirebaseAuth.getInstance()
 
         val clientGeneratedInvoice =
-            Common.acceptedRequestInvoiceCollectionRef.whereEqualTo("customerID", mAuth.uid)
+            Common.acceptedRequestInvoiceCollectionRef.whereEqualTo("customerID", mAuth.uid).orderBy(
+                FieldPath.documentId(), Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<AcceptedRequestInvoice>()
             .setQuery(clientGeneratedInvoice, AcceptedRequestInvoice::class.java).build()

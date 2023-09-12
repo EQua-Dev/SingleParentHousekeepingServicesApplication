@@ -69,10 +69,10 @@ class ClientInvoiceDetailsBottomSheet : BottomSheetDialogFragment() {
         val tvFacilityEmail =
             requireView().findViewById<TextView>(R.id.client_generated_invoice_facility_email)
         val tvInvoiceText = requireView().findViewById<TextView>(R.id.client_generated_invoice_text)
-        val tvInvoiceDate =
-            requireView().findViewById<TextView>(R.id.client_generated_invoice_date_created)
-        val tvInvoiceTime =
-            requireView().findViewById<TextView>(R.id.client_generated_invoice_time_created)
+//        val tvInvoiceDate =
+//            requireView().findViewById<TextView>(R.id.client_generated_invoice_date_created)
+//        val tvInvoiceTime =
+//            requireView().findViewById<TextView>(R.id.client_generated_invoice_time_created)
 
         val btnProvidePayment =
             requireView().findViewById<Button>(R.id.client_generated_invoice_payment_button)
@@ -99,10 +99,10 @@ class ClientInvoiceDetailsBottomSheet : BottomSheetDialogFragment() {
             organisation.organisationEmail
         )
         tvInvoiceText.text = facilityGeneratedInvoice.invoiceText
-        tvInvoiceDate.text =
-            resources.getString(R.string.requesting_date_created, facilityGeneratedInvoice.dateCreated)
-        tvInvoiceTime.text =
-            resources.getString(R.string.requesting_time_created, facilityGeneratedInvoice.timeCreated)
+//        tvInvoiceDate.text =
+//            resources.getString(R.string.requesting_date_created, facilityGeneratedInvoice.dateCreated)
+//        tvInvoiceTime.text =
+//            resources.getString(R.string.requesting_time_created, facilityGeneratedInvoice.timeCreated)
 
 
 

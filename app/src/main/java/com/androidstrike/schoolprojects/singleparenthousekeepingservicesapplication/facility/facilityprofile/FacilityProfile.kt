@@ -57,6 +57,8 @@ class FacilityProfile : Fragment() {
             isEditing = true
             binding.txtFacilityProfilePhone.visible(false)
             binding.layoutEditNumber.visible(true)
+
+            binding.facilityUpdateProfilePhoneNumber.setText(binding.txtFacilityProfilePhone.text.toString())
         }
 
             binding.txtSubmitNumberUpdate.setOnClickListener {
