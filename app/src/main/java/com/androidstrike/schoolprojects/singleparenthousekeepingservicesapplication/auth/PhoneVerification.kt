@@ -53,8 +53,8 @@ class PhoneVerification : Fragment() {
         val numberToSend = changeFirstCharacter(userPhoneNumber, "+353")
         Log.d(TAG, "numberToSend: $numberToSend")
         val options = PhoneAuthOptions.newBuilder(Common.auth)
-            .setPhoneNumber(userPhoneNumber) // Phone number to verify
-//            .setPhoneNumber(numberToSend) // Phone number to verify
+//            .setPhoneNumber(userPhoneNumber) // Phone number to verify
+            .setPhoneNumber(numberToSend) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks

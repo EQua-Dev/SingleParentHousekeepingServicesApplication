@@ -19,6 +19,7 @@ object Common {
     const val SERVICE = "Organisation's Profile Service Offered"
     private const val CUSTOMER_REQUEST_FORMS = "Customer's Service Request Form"
     private const val REQUEST_RESPONSE_NOTIFICATION_REF = "Notification of Customer's Service Request Form Acceptance or Rejection"
+    private const val FACILITY_MEETING_SCHEDULE_FORM = "Notification of Accepted Customer Request Form Scheduled"
     private const val ACCEPTED_REQUEST_PAYMENT_INVOICE_REF = "Invoice for Payment of Accepted Customer's Service Request"
     private const val CUSTOMER_INVOICE_PAYMENT_REF = "Payment for Invoice of Accepted Customer's Service Request"
 
@@ -52,6 +53,7 @@ object Common {
     val appointmentsCollectionRef = Firebase.firestore.collection(CUSTOMER_REQUEST_FORMS)
     val requestResponseNotificationCollectionRef = Firebase.firestore.collection(REQUEST_RESPONSE_NOTIFICATION_REF)
     val acceptedRequestInvoiceCollectionRef = Firebase.firestore.collection(ACCEPTED_REQUEST_PAYMENT_INVOICE_REF)
+    val meetingScheduleFormCollectionRef = Firebase.firestore.collection(FACILITY_MEETING_SCHEDULE_FORM)
     val invoicePaymentCollectionRef = Firebase.firestore.collection(CUSTOMER_INVOICE_PAYMENT_REF)
     val feedbackCollectionRef = Firebase.firestore.collection("Feedbacks")
     val walletCollectionRef = Firebase.firestore.collection(WALLET_REF)

@@ -15,6 +15,7 @@ import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplicat
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientinvoice.InvoicePayment
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientnotification.ClientNotification
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientfeedback.FeedbackRating
+import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.clientnotification.ClientNotificationBase
 import com.androidstrike.schoolprojects.singleparenthousekeepingservicesapplication.client.landing.MapsFragment
 
 /**
@@ -38,7 +39,7 @@ class ClientLandingPagerAdapter (//var context: FragmentActivity?,
                 DigitalWallet()
             }
             2 -> {
-                ClientNotification()
+                ClientNotificationBase()
             }
             3 -> {
                 InvoicePayment()

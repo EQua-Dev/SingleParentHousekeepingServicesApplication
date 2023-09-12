@@ -232,6 +232,9 @@
     <string name="request_delivery_address_city">Delivery City: %s</string>
     <string name="request_delivery_address_eir_code">Delivery Eir Code: %s</string>
 
+    <string name="scheduled_meeting_text">Dear %s,\n\nThis is to confirm that your request has been accepted for service: %s.\n\nMeeting date is: %s\nMeeting time is : %s</string>
+
+
 
     <string-array name="service_available_places_option">
         <item>Yes</item>
